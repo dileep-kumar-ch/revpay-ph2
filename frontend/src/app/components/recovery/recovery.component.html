@@ -1,0 +1,56 @@
+<div class="recovery-container">
+    <div class="recovery-card">
+        <h2>Account Recovery</h2>
+
+        <!-- Step 1: Email Input -->
+        <div *ngIf="step === 'EMAIL'">
+            <p class="subtitle">Enter your email to find your security questions.</p>
+            <form [formGroup]="emailForm" (ngSubmit)="onEmailSubmit()">
+                <div class="form-group">
+                    <label>Email Address</label>
+                    <input type="email" formControlName="email" class="form-control" placeholder="john@example.com" />
+                </div>
+                <div class="error-message" *ngIf="errorMessage">{{ errorMessage }}</div>
+                <button type="submit" class="btn-primary" [disabled]="emailForm.invalid || loading">
+                    {{ loading ? 'Looking up...' : 'Find Questions' }}
+                </button>
+            </form>
+        </div>
+
+        <!-- Step 2: Answer Questions & New Password -->
+        <div *ngIf="step === 'QUESTIONS'">
+            <p class="subtitle">Answer your security questions to reset your password.</p>
+            <form [formGroup]="questionsForm" (ngSubmit)="onResetSubmit()">
+                <div formArrayName="answers">
+                    <div *ngFor="let q of answers.controls; let i=index" [formGroupName]="i" class="form-group">
+                        <label>{{ questions[i] }}</label>
+                        <input type="text" formControlName="answer" class="form-control" placeholder="Your answer" />
+                    </div>
+                </div>
+
+                <div class="form-group">
+                    <label>New Password</label>
+                    <input type="password" formControlName="newPassword" class="form-control"
+                        placeholder="Min 6 characters" />
+                </div>
+
+                <div class="error-message" *ngIf="errorMessage">{{ errorMessage }}</div>
+                <button type="submit" class="btn-primary" [disabled]="questionsForm.invalid || loading">
+                    {{ loading ? 'Resetting...' : 'Reset Password' }}
+                </button>
+            </form>
+        </div>
+
+        <!-- Step 3: Success -->
+        <div *ngIf="step === 'SUCCESS'" class="success-step">
+            <div class="success-icon">✓</div>
+            <h3>Password Reset Successful</h3>
+            <p>Your password has been updated. You can now login with your new password.</p>
+            <button class="btn-primary" routerLink="/login">Back to Login</button>
+        </div>
+
+        <div class="back-link" *ngIf="step !== 'SUCCESS'">
+            <a routerLink="/login">Back to Login</a>
+        </div>
+    </div>
+</div>
