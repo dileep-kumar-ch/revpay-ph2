@@ -1,0 +1,40 @@
+<app-feature-nav></app-feature-nav>
+
+<div class="transactions-container">
+    <div class="header">
+        <h2>Transaction History</h2>
+    </div>
+
+    <div class="transactions-content">
+        <div *ngIf="loading" class="loading">Loading transactions...</div>
+
+        <div *ngIf="!loading && transactions.length === 0" class="no-transactions">
+            <p>No transactions yet</p>
+            <button class="btn-primary" routerLink="/wallet">Send Money</button>
+        </div>
+
+        <div *ngIf="!loading && transactions.length > 0" class="transactions-list">
+            <div *ngFor="let transaction of transactions" class="transaction-card">
+                <div class="transaction-header">
+                    <span class="transaction-type-badge" [class]="transaction.type.toLowerCase()">
+                        {{ transaction.type }}
+                    </span>
+                    <span class="transaction-status" [class]="transaction.status.toLowerCase()">
+                        {{ transaction.status }}
+                    </span>
+                </div>
+
+                <div class="transaction-body">
+                    <div class="transaction-details">
+                        <p class="description">{{ transaction.description }}</p>
+                        <p class="timestamp">{{ transaction.timestamp | date:'medium' }}</p>
+                    </div>
+
+                    <div class="transaction-amount" [class]="getTransactionClass(transaction)">
+                        {{ getTransactionSign(transaction) }}${{ transaction.amount | number:'1.2-2' }}
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

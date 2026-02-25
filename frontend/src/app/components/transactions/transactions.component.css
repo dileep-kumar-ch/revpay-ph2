@@ -1,0 +1,160 @@
+.transactions-container {
+    max-width: 900px;
+    margin: 2rem auto;
+    padding: 2rem;
+}
+
+.header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 2rem;
+}
+
+.header h2 {
+    margin: 0;
+    color: #333;
+}
+
+.btn-back {
+    padding: 0.5rem 1rem;
+    background: white;
+    color: #667eea;
+    border: 2px solid #667eea;
+    border-radius: 6px;
+    cursor: pointer;
+    font-weight: 600;
+    transition: all 0.3s;
+}
+
+.btn-back:hover {
+    background: #667eea;
+    color: white;
+}
+
+.transactions-content {
+    background: white;
+    border-radius: 12px;
+    padding: 2rem;
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+}
+
+.loading,
+.no-transactions {
+    text-align: center;
+    padding: 3rem;
+    color: #999;
+}
+
+.no-transactions p {
+    margin-bottom: 1rem;
+}
+
+.btn-primary {
+    padding: 0.75rem 1.5rem;
+    background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+    color: white;
+    border: none;
+    border-radius: 6px;
+    font-weight: 600;
+    cursor: pointer;
+}
+
+.transactions-list {
+    display: flex;
+    flex-direction: column;
+    gap: 1rem;
+}
+
+.transaction-card {
+    border: 1px solid #e9ecef;
+    border-radius: 8px;
+    padding: 1.5rem;
+    transition: box-shadow 0.3s;
+}
+
+.transaction-card:hover {
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+}
+
+.transaction-header {
+    display: flex;
+    justify-content: space-between;
+    margin-bottom: 1rem;
+}
+
+.transaction-type-badge {
+    padding: 0.25rem 0.75rem;
+    border-radius: 20px;
+    font-size: 0.75rem;
+    font-weight: 600;
+    text-transform: uppercase;
+}
+
+.transaction-type-badge.send {
+    background: #fee;
+    color: #c33;
+}
+
+.transaction-type-badge.receive {
+    background: #d4edda;
+    color: #155724;
+}
+
+.transaction-status {
+    padding: 0.25rem 0.75rem;
+    border-radius: 20px;
+    font-size: 0.75rem;
+    font-weight: 600;
+    text-transform: uppercase;
+}
+
+.transaction-status.completed {
+    background: #d4edda;
+    color: #155724;
+}
+
+.transaction-status.pending {
+    background: #fff3cd;
+    color: #856404;
+}
+
+.transaction-status.failed {
+    background: #fee;
+    color: #c33;
+}
+
+.transaction-body {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+.transaction-details {
+    flex: 1;
+}
+
+.description {
+    margin: 0 0 0.5rem 0;
+    color: #333;
+    font-weight: 500;
+}
+
+.timestamp {
+    margin: 0;
+    color: #999;
+    font-size: 0.875rem;
+}
+
+.transaction-amount {
+    font-size: 1.5rem;
+    font-weight: 700;
+}
+
+.transaction-amount.positive {
+    color: #27ae60;
+}
+
+.transaction-amount.negative {
+    color: #e74c3c;
+}
