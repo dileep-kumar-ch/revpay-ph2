@@ -24,8 +24,7 @@
             <div class="virtual-card-preview" [class.visa]="cardForm.get('cardNumber')?.value?.startsWith('4')"
                 [class.mastercard]="cardForm.get('cardNumber')?.value?.startsWith('5')">
                 <div class="card-chip"></div>
-                <div class="card-number-display">{{ formatCardNumber(cardForm.get('cardNumber')?.value) || '**** ****
-                    **** ****' }}</div>
+                <div class="card-number-display">{{ formatCardNumber(cardForm.get('cardNumber')?.value) || '**** **** **** ****' }}</div>
                 <div class="card-details-row">
                     <div class="card-holder-display">{{ cardForm.get('cardHolderName')?.value || 'YOUR NAME' }}</div>
                     <div class="card-expiry-display">{{ cardForm.get('expiryDate')?.value || 'MM/YY' }}</div>
@@ -35,8 +34,12 @@
             <form [formGroup]="cardForm" (ngSubmit)="onSubmit()" class="modern-form">
                 <div class="form-group floating-label">
                     <input type="text" id="cardHolderName" formControlName="cardHolderName" placeholder=" "
-                        autocomplete="cc-name">
+                        autocomplete="cc-name" (input)="onCardHolderNameInput($event)">
                     <label for="cardHolderName">Cardholder Name</label>
+                    <small class="field-error"
+                        *ngIf="cardForm.get('cardHolderName')?.touched && cardForm.get('cardHolderName')?.errors?.['pattern']">
+                        Cardholder name must contain letters only.
+                    </small>
                 </div>
 
                 <div class="form-group select-group">
@@ -68,9 +71,13 @@
                         </small>
                     </div>
                     <div class="form-group floating-label">
-                        <input type="password" id="cvv" formControlName="cvv" maxlength="4" placeholder=" "
+                        <input type="password" id="cvv" formControlName="cvv" maxlength="3" placeholder=" "
                             autocomplete="cc-csc" inputmode="numeric" (input)="onCvvInput($event)">
                         <label for="cvv">CVV</label>
+                        <small class="field-error"
+                            *ngIf="cardForm.get('cvv')?.touched && cardForm.get('cvv')?.errors?.['pattern']">
+                            CVV must be exactly 3 digits.
+                        </small>
                     </div>
                 </div>
 
