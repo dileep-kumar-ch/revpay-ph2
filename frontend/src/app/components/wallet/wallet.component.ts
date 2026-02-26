@@ -1,18 +1,11 @@
 import { Component, OnInit } from '@angular/core';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
-import { Observable } from 'rxjs';
 import { PaymentService } from '../../services/payment.service';
 import { TransactionService } from '../../services/transaction.service';
+
 import { Wallet } from '../../models/wallet.model';
 
-interface Invoice {
-  id: number;
-  amount: number;
-  dueDate: string;
-  business: {
-    username: string;
-  };
-}
+import { Card } from '../../models/card.model';
 
 @Component({
   selector: 'app-wallet',
@@ -21,22 +14,26 @@ interface Invoice {
 })
 export class WalletComponent implements OnInit {
   wallet: Wallet | null = null;
+  cards: Card[] = [];
+  filteredFundCards: Card[] = [];
   sendMoneyForm!: FormGroup;
   fundForm!: FormGroup;
   withdrawForm!: FormGroup;
-  pendingInvoices: Invoice[] = [];
+
 
   loading = false;
   successMessage = '';
   errorMessage = '';
   activeTab: 'send' | 'add' | 'withdraw' | 'bills' = 'send';
+  readonly paymentMethodOptions: Array<'DEFAULT' | 'DEBIT' | 'CREDIT'> = ['DEFAULT', 'DEBIT', 'CREDIT'];
   showPinModal = false;
   pendingOperation: (() => void) | null = null;
 
   constructor(
     private fb: FormBuilder,
     private paymentService: PaymentService,
-    private transactionService: TransactionService
+    private transactionService: TransactionService,
+    
   ) { }
 
   ngOnInit(): void {
@@ -47,7 +44,9 @@ export class WalletComponent implements OnInit {
     });
 
     this.fundForm = this.fb.group({
-      amount: ['', [Validators.required, Validators.min(1)]]
+      amount: ['', [Validators.required, Validators.min(1)]],
+      paymentMethodType: ['DEFAULT', Validators.required],
+      cardId: ['', Validators.required]
     });
 
     this.withdrawForm = this.fb.group({
@@ -55,7 +54,12 @@ export class WalletComponent implements OnInit {
     });
 
     this.loadWallet();
-    this.loadPendingInvoices();
+    this.loadCards();
+
+    this.fundForm.get('paymentMethodType')?.valueChanges.subscribe(() => {
+      this.applyFundingCardSelection();
+    });
+   
   }
 
   loadWallet(): void {
@@ -69,9 +73,34 @@ export class WalletComponent implements OnInit {
     });
   }
 
-  loadPendingInvoices(): void {
-    this.pendingInvoices = [];
+  loadCards(): void {
+    this.paymentService.getCards().subscribe(cards => {
+      this.cards = [...cards].sort((a, b) => Number(b.isDefault) - Number(a.isDefault));
+      this.applyFundingCardSelection();
+    });
   }
+
+  private applyFundingCardSelection(): void {
+    const method = this.fundForm.get('paymentMethodType')?.value as 'DEFAULT' | 'DEBIT' | 'CREDIT';
+    const selectedCardId = this.fundForm.get('cardId')?.value;
+    const defaultCard = this.cards.find(c => c.isDefault);
+
+    if (method === 'DEFAULT') {
+      this.filteredFundCards = defaultCard ? [defaultCard] : [];
+      this.fundForm.patchValue({ cardId: defaultCard?.id ?? '' }, { emitEvent: false });
+      return;
+    }
+
+    this.filteredFundCards = this.cards.filter(card => card.paymentMethodType === method);
+    const stillValid = this.filteredFundCards.some(card => card.id === selectedCardId);
+
+    if (!stillValid) {
+      const preferred = this.filteredFundCards.find(card => card.isDefault) || this.filteredFundCards[0];
+      this.fundForm.patchValue({ cardId: preferred?.id ?? '' }, { emitEvent: false });
+    }
+  }
+
+ 
 
   onSendMoney(): void {
     if (this.sendMoneyForm.invalid) return;
@@ -82,9 +111,9 @@ export class WalletComponent implements OnInit {
 
   onAddFunds(): void {
     if (this.fundForm.invalid) return;
-    const { amount } = this.fundForm.value;
+    const { amount, cardId } = this.fundForm.value;
     this.promptPin(() => {
-      this.executeOperation(() => this.paymentService.addFunds(amount), `Successfully added ${amount} to your wallet!`);
+      this.executeOperation(() => this.paymentService.addFunds(amount, cardId), `Successfully added ${amount} to your wallet!`);
     });
   }
 
@@ -96,9 +125,7 @@ export class WalletComponent implements OnInit {
     });
   }
 
-  onPayInvoice(invoice: Invoice): void {
-    this.errorMessage = `Invoice payment is not available yet (Invoice #${invoice.id}).`;
-  }
+
 
   promptPin(operation: () => void): void {
     this.pendingOperation = operation;
@@ -118,7 +145,7 @@ export class WalletComponent implements OnInit {
     this.pendingOperation = null;
   }
 
-  private executeOperation(operation: () => Observable<unknown>, successMsg: string): void {
+  private executeOperation(operation: () => any, successMsg: string): void {
     this.loading = true;
     this.successMessage = '';
     this.errorMessage = '';
@@ -127,10 +154,11 @@ export class WalletComponent implements OnInit {
       next: () => {
         this.successMessage = successMsg;
         this.sendMoneyForm.reset();
-        this.fundForm.reset();
+        this.fundForm.reset({ paymentMethodType: 'DEFAULT', cardId: '' });
+        this.applyFundingCardSelection();
         this.withdrawForm.reset();
         this.loadWallet();
-        this.loadPendingInvoices();
+        
         this.loading = false;
       },
       error: (error: any) => {
