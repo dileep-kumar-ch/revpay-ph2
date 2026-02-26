@@ -20,7 +20,7 @@ export class PaymentMethodsComponent implements OnInit {
 
   constructor(private fb: FormBuilder, private paymentService: PaymentService) {
     this.cardForm = this.fb.group({
-      cardHolderName: ['', Validators.required],
+      cardHolderName: ['', [Validators.required, Validators.pattern('^[A-Za-z ]+$')]],
       paymentMethodType: ['DEBIT', Validators.required],
       cardNumber: ['', [Validators.required, Validators.pattern('^[0-9]{16}$')]],
       expiryDate: ['', [
@@ -28,7 +28,7 @@ export class PaymentMethodsComponent implements OnInit {
         Validators.pattern('^(0[1-9]|1[0-2])\\/([0-9]{2})$'),
         this.expiryNotPastValidator()
       ]],
-      cvv: ['', [Validators.required, Validators.pattern('^[0-9]{3,4}$')]],
+      cvv: ['', [Validators.required, Validators.pattern('^[0-9]{3}$')]],
       setAsDefault: [false]
     });
   }
@@ -66,11 +66,7 @@ export class PaymentMethodsComponent implements OnInit {
     this.loading = true;
     this.paymentService.getCards().subscribe({
       next: (cards) => {
-        const normalizedCards = [...cards];
-        if (normalizedCards.length > 0 && !normalizedCards.some(card => card.isDefault)) {
-          normalizedCards[0] = { ...normalizedCards[0], isDefault: true };
-        }
-        this.cards = normalizedCards.sort((a, b) => Number(b.isDefault) - Number(a.isDefault));
+        this.cards = [...cards].sort((a, b) => Number(b.isDefault) - Number(a.isDefault));
         this.loading = false;
       },
       error: (err) => {
@@ -193,9 +189,16 @@ export class PaymentMethodsComponent implements OnInit {
 
   onCvvInput(event: Event): void {
     const input = event.target as HTMLInputElement;
-    const digits = (input.value || '').replace(/\D/g, '').slice(0, 4);
+    const digits = (input.value || '').replace(/\D/g, '').slice(0, 3);
     this.cardForm.get('cvv')?.setValue(digits, { emitEvent: false });
     input.value = digits;
+  }
+
+  onCardHolderNameInput(event: Event): void {
+    const input = event.target as HTMLInputElement;
+    const sanitized = (input.value || '').replace(/[^A-Za-z ]/g, '').replace(/\s{2,}/g, ' ');
+    this.cardForm.get('cardHolderName')?.setValue(sanitized, { emitEvent: false });
+    input.value = sanitized;
   }
 
   onExpiryInput(event: Event): void {
