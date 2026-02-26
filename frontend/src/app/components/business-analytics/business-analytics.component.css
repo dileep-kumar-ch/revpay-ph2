@@ -2,7 +2,7 @@
     max-width: 1100px;
     margin: 0 auto;
     padding: 1.5rem;
-    color: #e2e8f0;
+    color: #431407;
 }
 
 .head {
@@ -14,20 +14,27 @@
 
 .head h2 {
     margin: 0;
+    color: #9a3412;
 }
 
 .head p {
     margin: 0.35rem 0 0;
-    color: #94a3b8;
+    color: #7c2d12;
 }
 
 .back-link {
-    color: #7dd3fc;
+    color: #c2410c;
     text-decoration: none;
-    border: 1px solid rgba(125, 211, 252, 0.45);
+    border: 1px solid #fdba74;
+    background: #fff7ed;
     border-radius: 8px;
     padding: 0.5rem 0.75rem;
     font-weight: 600;
+}
+
+.back-link:hover {
+    color: #ea580c;
+    border-color: #ea580c;
 }
 
 .filters {
@@ -46,9 +53,9 @@
 input,
 button {
     border-radius: 8px;
-    border: 1px solid rgba(255, 255, 255, 0.2);
-    background: rgba(255, 255, 255, 0.06);
-    color: #f8fafc;
+    border: 1px solid #fdba74;
+    background: #fff7ed;
+    color: #431407;
     padding: 0.5rem 0.7rem;
 }
 
@@ -65,25 +72,27 @@ button {
 }
 
 .tile {
-    background: rgba(15, 23, 42, 0.7);
-    border: 1px solid rgba(148, 163, 184, 0.18);
+    background: #ffffff;
+    border: 1px solid #fed7aa;
     border-radius: 10px;
-    padding: 0.85rem;
+    padding: 0.95rem;
+    box-shadow: 0 8px 24px rgba(234, 88, 12, 0.08);
 }
 
 .tile h4 {
     margin: 0;
-    color: #cbd5e1;
+    color: #7c2d12;
 }
 
 .tile p {
     margin: 0.4rem 0 0.2rem;
     font-size: 1.25rem;
     font-weight: 700;
+    color: #ea580c;
 }
 
 .tile small {
-    color: #94a3b8;
+    color: #7c2d12;
 }
 
 .chart-panels {
@@ -94,8 +103,8 @@ button {
 }
 
 .panel {
-    background: rgba(15, 23, 42, 0.65);
-    border: 1px solid rgba(148, 163, 184, 0.18);
+    background: #ffffff;
+    border: 1px solid #fed7aa;
     border-radius: 10px;
     padding: 0.85rem;
 }
@@ -108,7 +117,7 @@ button {
     display: flex;
     justify-content: space-between;
     padding: 0.45rem 0;
-    border-bottom: 1px solid rgba(148, 163, 184, 0.2);
+    border-bottom: 1px solid #ffedd5;
 }
 
 .list-item:last-child {
@@ -117,9 +126,9 @@ button {
 
 .alert {
     margin-top: 0.9rem;
-    border: 1px solid rgba(248, 113, 113, 0.45);
-    background: rgba(127, 29, 29, 0.35);
-    color: #fecaca;
+    border: 1px solid #fecaca;
+    background: #fef2f2;
+    color: #991b1b;
     border-radius: 8px;
     padding: 0.65rem 0.75rem;
 }

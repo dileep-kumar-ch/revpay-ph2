@@ -36,6 +36,22 @@
     color: #ffffff;
 }
 
+.notification-link {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.4rem;
+}
+
+.badge {
+    background: #ef4444;
+    color: #ffffff;
+    min-width: 18px;
+    padding: 2px 6px;
+    border-radius: 10px;
+    font-size: 0.72rem;
+    text-align: center;
+}
+
 .logout-btn {
     margin-left: auto;
     border: 1px solid rgba(255, 255, 255, 0.25);

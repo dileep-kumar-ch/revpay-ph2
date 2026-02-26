@@ -13,6 +13,7 @@ import { AuthGuard } from './guards/auth.guard';
 import { PaymentMethodsComponent } from './components/payment-methods/payment-methods.component';
 import { BusinessComponent } from './components/business/business.component';
 import { BusinessAnalyticsComponent } from './components/business-analytics/business-analytics.component';
+import { NotificationsComponent } from './components/notifications/notifications.component';
 
 const routes: Routes = [
   { path: 'login', component: LoginComponent },
@@ -55,6 +56,11 @@ const routes: Routes = [
   {
     path: 'analytics',
     component: BusinessAnalyticsComponent,
+    canActivate: [AuthGuard]
+  },
+  {
+    path: 'notifications',
+    component: NotificationsComponent,
     canActivate: [AuthGuard]
   },
   { path: 'recovery', component: RecoveryComponent },

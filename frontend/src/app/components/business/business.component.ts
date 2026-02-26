@@ -2,6 +2,7 @@ import { Component, OnInit } from '@angular/core';
 import { FormArray, FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { AuthService } from '../../services/auth.service';
 import { BusinessService } from '../../services/business.service';
+import { NotificationService } from '../../services/notification.service';
 import {
   CreateInvoiceRequest,
   InvoicePaymentRequest,
@@ -38,7 +39,8 @@ export class BusinessComponent implements OnInit {
   constructor(
     private fb: FormBuilder,
     private authService: AuthService,
-    private businessService: BusinessService
+    private businessService: BusinessService,
+    private notificationService: NotificationService
   ) {
     this.invoiceForm = this.fb.group({
       customerName: ['', Validators.required],
@@ -104,6 +106,7 @@ export class BusinessComponent implements OnInit {
     this.businessService.createInvoice(payload).subscribe({
       next: () => {
         this.showSuccess('Invoice created and notification triggered.');
+        this.notificationService.refreshUnreadCount();
         this.invoiceForm.reset({
           customerName: '',
           customerEmail: '',
@@ -160,6 +163,7 @@ export class BusinessComponent implements OnInit {
     this.businessService.payInvoice(this.invoicePayForm.value).subscribe({
       next: (invoice) => {
         this.showSuccess(`Invoice ${invoice.invoiceNumber} paid successfully.`);
+        this.notificationService.refreshUnreadCount();
         this.loadInvoices();
         this.loading = false;
       },

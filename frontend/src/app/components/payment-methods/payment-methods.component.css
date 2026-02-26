@@ -2,7 +2,7 @@
     padding: 2.5rem;
     max-width: 1200px;
     margin: 0 auto;
-    color: #e0e0e0;
+    color: #431407;
 }
 
 .header-section {
@@ -16,10 +16,7 @@
     font-size: 2rem;
     font-weight: 700;
     margin: 0;
-    background: linear-gradient(135deg, #fff 0%, #a5a5a5 100%);
-    -webkit-background-clip: text;
-    background-clip: text;
-    -webkit-text-fill-color: transparent;
+    color: #9a3412;
 }
 
 /* Modal Styling */
@@ -270,7 +267,7 @@
 .btn-primary-glow {
     width: 100%;
     padding: 1rem;
-    background: linear-gradient(to right, #4facfe 0%, #00f2fe 100%);
+    background: linear-gradient(to right, #ea580c 0%, #f97316 100%);
     border: none;
     border-radius: 10px;
     color: #000;
@@ -278,12 +275,12 @@
     font-size: 1rem;
     cursor: pointer;
     transition: all 0.3s;
-    box-shadow: 0 4px 15px rgba(79, 172, 254, 0.4);
+    box-shadow: 0 4px 15px rgba(234, 88, 12, 0.4);
 }
 
 .btn-primary-glow:hover {
     transform: translateY(-2px);
-    box-shadow: 0 6px 20px rgba(79, 172, 254, 0.6);
+    box-shadow: 0 6px 20px rgba(234, 88, 12, 0.6);
 }
 
 .btn-primary-glow:disabled {
@@ -440,9 +437,9 @@
 }
 
 .btn-set-default {
-    background: rgba(64, 181, 246, 0.2);
-    border: 1px solid rgba(64, 181, 246, 0.5);
-    color: #b9ebff;
+    background: rgba(234, 88, 12, 0.2);
+    border: 1px solid rgba(234, 88, 12, 0.6);
+    color: #ffedd5;
     padding: 6px 12px;
     border-radius: 8px;
     font-size: 0.8rem;
@@ -451,9 +448,9 @@
 }
 
 .btn-set-default:hover {
-    background: rgba(64, 181, 246, 0.32);
-    border-color: rgba(64, 181, 246, 0.85);
-    color: #eaffff;
+    background: rgba(234, 88, 12, 0.4);
+    border-color: rgba(234, 88, 12, 0.95);
+    color: #fff;
 }
 
 .btn-set-default:disabled {
@@ -503,4 +500,9 @@
 .glass-morphism {
     background: rgba(30, 30, 30, 0.8);
     backdrop-filter: blur(20px);
+}
+
+.empty-state {
+    margin-top: 1.5rem;
+    color: #7c2d12;
 }

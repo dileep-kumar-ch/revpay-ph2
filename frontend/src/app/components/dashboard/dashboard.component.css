@@ -1,10 +1,10 @@
 .dashboard-container {
     min-height: 100vh;
-    background: #f5f7fa;
+    background: #fff7ed;
 }
 
 .navbar {
-    background: white;
+    background: #fff;
     padding: 1rem 2rem;
     box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
     display: flex;
@@ -25,13 +25,13 @@
 }
 
 .logo-rp-s {
-    background: #00d2ff;
-    color: #1e3c72;
+    background: #f97316;
+    color: #fff;
     padding: 4px 8px;
     border-radius: 6px;
     font-weight: 800;
     font-size: 1.2rem;
-    box-shadow: 0 2px 8px rgba(0, 210, 255, 0.3);
+    box-shadow: 0 2px 8px rgba(249, 115, 22, 0.3);
 }
 
 .logo-mini {
@@ -41,8 +41,8 @@
 }
 
 .logo-rp-s {
-    background: #00d2ff;
-    color: #1e3c72;
+    background: #f97316;
+    color: #fff;
     padding: 4px 8px;
     border-radius: 6px;
     font-weight: 800;
@@ -51,7 +51,7 @@
 
 .nav-brand h1 {
     margin: 0;
-    color: #00d2ff;
+    color: #c2410c;
     font-size: 1.5rem;
 }
 
@@ -87,6 +87,7 @@
     display: flex;
     gap: 1.5rem;
     align-items: center;
+    color: #f97316;
 }
 
 .nav-menu a {
@@ -98,7 +99,7 @@
 
 .nav-menu a:hover,
 .nav-menu a.active {
-    color: #667eea;
+    color: #ea580c;
 }
 
 .btn-logout {
@@ -123,12 +124,12 @@
 
 .welcome-section h2 {
     margin: 0 0 0.5rem 0;
-    color: #333;
+    color: #9a3412;
 }
 
 .welcome-section p {
     margin: 0;
-    color: #666;
+    color: #7c2d12;
 }
 
 .cards-grid {
@@ -154,7 +155,7 @@
 
 .card-header h3 {
     margin: 0;
-    color: #333;
+    color: #7c2d12;
 }
 
 .icon {
@@ -177,7 +178,7 @@
 .amount {
     font-size: 2.5rem;
     font-weight: 700;
-    color: #667eea;
+    color: #379b09;
 }
 
 .transactions-list {
@@ -209,7 +210,7 @@
 }
 
 .transaction-desc {
-    color: #333;
+    color: #7c2d12;
 }
 
 .transaction-amount {
@@ -232,7 +233,7 @@
 .btn-action {
     width: 100%;
     padding: 0.75rem;
-    background: #667eea;
+    background: #ea580c;
     color: white;
     border: none;
     border-radius: 6px;
@@ -242,7 +243,7 @@
 }
 
 .btn-action:hover {
-    background: #5568d3;
+    background: #c2410c;
 }
 
 .quick-actions {
@@ -254,7 +255,7 @@
 
 .quick-actions h3 {
     margin: 0 0 1rem 0;
-    color: #333;
+    color: #7c2d12;
 }
 
 .actions-grid {
@@ -277,8 +278,8 @@
 }
 
 .action-btn:hover {
-    background: #667eea;
-    border-color: #667eea;
+    background: #ea580c;
+    border-color: #ea580c;
     color: white;
     transform: translateY(-2px);
 }
