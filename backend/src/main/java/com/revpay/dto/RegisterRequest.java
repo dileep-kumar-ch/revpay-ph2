@@ -35,6 +35,7 @@ public class RegisterRequest {
     private String businessType;
     private String taxId;
     private String businessAddress;
+    private String verificationDocsPath;
 
     private java.util.List<SecurityQuestionDto> securityQuestions;
 }

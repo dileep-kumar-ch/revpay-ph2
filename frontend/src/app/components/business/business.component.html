@@ -1,0 +1,148 @@
+<app-feature-nav></app-feature-nav>
+
+<div class="business-container" *ngIf="isBusinessUser(); else nonBusinessState">
+    <div class="header-row">
+        <div>
+            <h2>Business Hub</h2>
+            <p>Manage invoices and loans.</p>
+        </div>
+        <a routerLink="/analytics" class="analytics-link">Analytics Dashboard</a>
+    </div>
+
+    <div *ngIf="error" class="alert alert-error">{{ error }}</div>
+    <div *ngIf="success" class="alert alert-success">{{ success }}</div>
+
+    <div class="tab-row">
+        <button [class.active]="tab === 'invoices'" (click)="switchTab('invoices')">Invoices</button>
+        <button [class.active]="tab === 'loans'" (click)="switchTab('loans')">Loans</button>
+    </div>
+
+    <section *ngIf="tab === 'invoices'" class="panel">
+        <h3>Invoices</h3>
+        <div class="split-layout">
+            <div>
+                <h4>Create Itemized Invoice</h4>
+                <form [formGroup]="invoiceForm" (ngSubmit)="createInvoice()" class="stack-form">
+                    <input formControlName="customerName" placeholder="Customer name" />
+                    <input formControlName="customerEmail" placeholder="Customer email" />
+                    <input formControlName="customerPhone" placeholder="Customer phone" />
+                    <input formControlName="customerId" placeholder="Customer ID" />
+                    <div class="inline">
+                        <input formControlName="currency" placeholder="Currency" />
+                        <input type="date" formControlName="dueDate" />
+                    </div>
+                    <input formControlName="description" placeholder="Description" />
+                    <input formControlName="paymentTerms" placeholder="Payment terms" />
+                    <div formArrayName="items" class="item-array">
+                        <div *ngFor="let item of invoiceItems.controls; let i = index" [formGroupName]="i" class="item-row">
+                            <input formControlName="itemName" placeholder="Item name" />
+                            <input type="number" min="1" formControlName="quantity" placeholder="Qty" />
+                            <input type="number" min="0.01" step="0.01" formControlName="unitPrice"
+                                placeholder="Unit price" />
+                            <button type="button" (click)="removeInvoiceItem(i)">X</button>
+                        </div>
+                    </div>
+                    <button type="button" class="secondary" (click)="addInvoiceItem()">+ Add Item</button>
+                    <button type="submit" [disabled]="invoiceForm.invalid || loading">Create Invoice</button>
+                </form>
+            </div>
+
+            <div>
+                <h4>Lookup & Pay Invoice</h4>
+                <form [formGroup]="invoicePayForm" class="stack-form">
+                    <select formControlName="lookupType">
+                        <option value="INVOICE_NUMBER">Invoice Number</option>
+                        <option value="PHONE">Phone</option>
+                        <option value="EMAIL">Email</option>
+                        <option value="CUSTOMER_ID">Customer ID</option>
+                    </select>
+                    <input formControlName="lookupValue" placeholder="Lookup value" />
+                    <button type="button" class="secondary" (click)="lookupInvoices()">Lookup</button>
+                </form>
+                <div class="list">
+                    <div class="list-item" *ngFor="let result of lookupResults">
+                        <div>
+                            <strong>{{ result.invoiceNumber }}</strong> - {{ result.amount | currency:result.currency }}
+                            <span class="badge" [class.warn]="result.status === 'OVERDUE'">{{ result.status }}</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="list-header">
+            <h4>Manage Invoices</h4>
+            <select [(ngModel)]="invoiceStatusFilter" (change)="filterInvoices()" [ngModelOptions]="{standalone: true}">
+                <option value="">All</option>
+                <option value="SENT">Unpaid</option>
+                <option value="PAID">Paid</option>
+                <option value="OVERDUE">Overdue</option>
+            </select>
+        </div>
+        <div class="list">
+            <div class="list-item" *ngFor="let invoice of invoices">
+                <div>
+                    <strong>{{ invoice.invoiceNumber }}</strong> - {{ invoice.customerName }} -
+                    {{ invoice.amount | currency:invoice.currency }}
+                    <span class="badge" [class.warn]="invoice.status === 'OVERDUE'">{{ invoice.status }}</span>
+                </div>
+                <small>Due: {{ invoice.dueDate | date:'mediumDate' }}</small>
+            </div>
+        </div>
+    </section>
+
+    <section *ngIf="tab === 'loans'" class="panel">
+        <h3>Business Loans</h3>
+        <div class="split-layout">
+            <div>
+                <h4>Apply for Loan</h4>
+                <form [formGroup]="loanForm" (ngSubmit)="applyLoan()" class="stack-form">
+                    <input type="number" min="1" formControlName="loanAmount" placeholder="Loan amount" />
+                    <input formControlName="purpose" placeholder="Purpose" />
+                    <textarea formControlName="financialDetails" placeholder="Financial details"></textarea>
+                    <div class="file-field">
+                        <label for="supportingDocument">Supporting Documents</label>
+                        <input id="supportingDocument" type="file" accept=".pdf,.png,.jpg,.jpeg,.doc,.docx"
+                            (change)="onSupportingDocumentSelected($event)" />
+                        <small *ngIf="selectedSupportingDocumentName">Selected: {{ selectedSupportingDocumentName }}</small>
+                    </div>
+                    <input type="number" min="1" formControlName="termMonths" placeholder="Term months" />
+                    <button type="submit" [disabled]="loanForm.invalid || loading">Submit Application</button>
+                </form>
+            </div>
+
+            <div class="repayments-panel">
+                <h4>Repayments</h4>
+                <div class="repayments-scroll">
+                    <div class="loan-card" *ngFor="let loan of loans">
+                        <div class="loan-head">
+                            <strong>Loan #{{ loan.id }}</strong>
+                            <span class="badge">{{ loan.status }}</span>
+                        </div>
+                        <p>Amount: {{ loan.loanAmount | currency }}</p>
+                        <p>Remaining: {{ loan.remainingBalance | currency }}</p>
+                        <div class="repayment-item" *ngFor="let repayment of loan.repayments">
+                            <span>#{{ repayment.installmentNumber }} - {{ repayment.amount | currency }} - {{ repayment.status }}
+                                ({{ repayment.dueDate | date:'mediumDate' }})</span>
+                            <button *ngIf="repayment.status !== 'PAID'" (click)="payInstallment(loan.id, repayment.id)">Pay
+                            </button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+</div>
+
+<app-pin-verification *ngIf="showPinModal" (verified)="onPinVerified()" (cancel)="onPinCancel()">
+</app-pin-verification>
+
+<ng-template #nonBusinessState>
+    <app-feature-nav></app-feature-nav>
+    <div class="business-container">
+        <div class="panel">
+            <h3>Business Module Access</h3>
+            <p>Switch to a business account to access this module.</p>
+        </div>
+    </div>
+</ng-template>

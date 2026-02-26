@@ -5,6 +5,8 @@
         <a routerLink="/transactions" routerLinkActive="active">Activity</a>
         <a routerLink="/requests" routerLinkActive="active">Requests</a>
         <a routerLink="/payment-methods" routerLinkActive="active">Cards</a>
+        <a *ngIf="isBusinessAccount()" routerLink="/business" routerLinkActive="active">Business</a>
+        <a *ngIf="isBusinessAccount()" routerLink="/analytics" routerLinkActive="active">Analytics</a>
         <a routerLink="/security" routerLinkActive="active">Security</a>
         <button type="button" class="logout-btn" (click)="logout()">Logout</button>
     </div>
