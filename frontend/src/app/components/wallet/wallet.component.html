@@ -22,8 +22,7 @@
             </button>
             <button class="flex-grow-1" [class.active]="activeTab === 'bills'" (click)="activeTab = 'bills'">
                 <i class="bi bi-receipt me-2"></i>Bills
-                <span *ngIf="pendingInvoices.length > 0" class="badge bg-danger rounded-pill ms-1">{{
-                    pendingInvoices.length }}</span>
+                
             </button>
         </div>
 
@@ -66,6 +65,28 @@
                 <h3 class="h4 mb-4">Fund Your Wallet</h3>
                 <form [formGroup]="fundForm" (ngSubmit)="onAddFunds()">
                     <div class="mb-3">
+                        <label class="form-label">Payment Method</label>
+                        <select class="form-select bg-transparent text-white" formControlName="paymentMethodType">
+                            <option *ngFor="let option of paymentMethodOptions" [ngValue]="option">
+                                {{ option === 'DEFAULT' ? 'Default Card' : (option + ' Card') }}
+                            </option>
+                        </select>
+                    </div>
+
+                    <div class="mb-3" *ngIf="fundForm.get('paymentMethodType')?.value !== 'DEFAULT'">
+                        <label class="form-label">Select Card</label>
+                        <select class="form-select bg-transparent text-white" formControlName="cardId">
+                            <option [ngValue]="''" disabled>Select a card</option>
+                            <option *ngFor="let card of filteredFundCards" [ngValue]="card.id">
+                                {{ card.isDefault ? 'Default - ' : '' }}{{ card.paymentMethodType }} {{ card.cardType }} •••• {{ card.lastFourDigits }}
+                            </option>
+                        </select>
+                        <p class="text-warning small mt-2 mb-0" *ngIf="filteredFundCards.length === 0">
+                            No matching cards found. Please add a card in Payment Methods.
+                        </p>
+                    </div>
+
+                    <div class="mb-3">
                         <label class="form-label">Amount to Add</label>
                         <div class="input-group">
                             <span class="input-group-text bg-transparent border-end-0 text-white">$</span>
@@ -74,7 +95,7 @@
                         </div>
                     </div>
                     <button type="submit" class="btn btn-primary btn-lg w-100 mt-2"
-                        [disabled]="fundForm.invalid || loading">
+                        [disabled]="fundForm.invalid || loading || filteredFundCards.length === 0">
                         {{ loading ? 'Processing...' : 'Add Funds' }}
                     </button>
                 </form>
@@ -104,30 +125,11 @@
 
             <!-- Bills Tab -->
             <div *ngIf="activeTab === 'bills'" class="op-section">
-                <h3 class="h5 text-white mb-4">Pending Invoices</h3>
-                <div *ngIf="pendingInvoices.length === 0" class="text-center py-5">
-                    <i class="bi bi-check2-circle h1 text-success opacity-50"></i>
-                    <p class="text-white-50 mt-2">All caught up! No pending invoices.</p>
-                </div>
-                <div *ngFor="let invoice of pendingInvoices"
-                    class="card mb-3 bg-white bg-opacity-10 border-0 text-white">
-                    <div class="card-body">
-                        <div class="d-flex justify-content-between align-items-start mb-2">
-                            <div>
-                                <h5 class="mb-0 h6">{{ invoice.business.username }}</h5>
-                                <small class="text-white-50">Due: {{ invoice.dueDate | date:'mediumDate' }}</small>
-                            </div>
-                            <div class="h5 mb-0 text-info">${{ invoice.amount | number:'1.2-2' }}</div>
-                        </div>
-                        <div class="mt-3">
-                            <button class="btn btn-sm btn-info w-100 fw-bold" (click)="onPayInvoice(invoice)">
-                                Pay Now
-                            </button>
-                        </div>
-                    </div>
-                </div>
+                <h3 class="h4 mb-4">Bills</h3>
+                <p class="text-white-50 mb-0">Bill payment feature will be available soon.</p>
             </div>
         </div>
+
         <div class="mt-4">
             <div class="alert alert-success alert-dismissible fade show border-0 bg-success bg-opacity-10 text-success"
                 *ngIf="successMessage">
