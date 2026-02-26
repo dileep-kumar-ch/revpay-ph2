@@ -8,14 +8,14 @@ import { AuthService } from '../../services/auth.service';
     <div class="container py-5">
       <div class="row justify-content-center">
         <div class="col-md-6">
-          <div class="card glass-morphism border-0 shadow-lg text-white">
+          <div class="card glass-morphism border-0 shadow-lg">
             <div class="card-body p-4 p-md-5">
               <h2 class="text-center mb-4">Reset Transaction PIN</h2>
               
               <div *ngIf="step === 1">
-                <p class="text-white-50 text-center mb-4">Enter your email to retrieve security questions.</p>
+                <p class="text-muted text-center mb-4">Enter your email to retrieve security questions.</p>
                 <div class="mb-4">
-                  <input type="email" class="form-control form-control-lg bg-transparent text-white" 
+                  <input type="email" class="form-control form-control-lg forgot-pin-input" 
                          [(ngModel)]="email" placeholder="Email Address">
                 </div>
                 <button class="btn btn-primary btn-lg w-100" (click)="getQuestions()" [disabled]="!email || loading">
@@ -24,10 +24,10 @@ import { AuthService } from '../../services/auth.service';
               </div>
 
               <div *ngIf="step === 2">
-                <p class="text-white-50 text-center mb-4">Please answer your security questions.</p>
+                <p class="text-muted text-center mb-4">Please answer your security questions.</p>
                 <div *ngFor="let q of questions; let i = index" class="mb-4">
                   <label class="form-label">{{ q }}</label>
-                  <input type="text" class="form-control bg-transparent text-white" 
+                  <input type="text" class="form-control forgot-pin-input" 
                          [(ngModel)]="answers[i]" placeholder="Your answer">
                 </div>
                 <button class="btn btn-primary btn-lg w-100" (click)="verifyAnswers()" [disabled]="loading">
@@ -36,9 +36,9 @@ import { AuthService } from '../../services/auth.service';
               </div>
 
               <div *ngIf="step === 3">
-                <p class="text-white-50 text-center mb-4">Set your new 4-digit transaction PIN.</p>
+                <p class="text-muted text-center mb-4">Set your new 4-digit transaction PIN.</p>
                 <div class="mb-4 text-center">
-                  <input type="password" class="form-control form-control-lg bg-transparent text-white text-center mx-auto" 
+                  <input type="password" class="form-control form-control-lg forgot-pin-input text-center mx-auto" 
                          [(ngModel)]="newPin" maxlength="4" style="max-width: 150px; font-size: 2rem; letter-spacing: 0.5rem;"
                          placeholder="****">
                 </div>
@@ -65,14 +65,23 @@ import { AuthService } from '../../services/auth.service';
   `,
     styles: [`
     .glass-morphism {
-      background: rgba(30, 60, 114, 0.85);
+      background: #ffffff;
       backdrop-filter: blur(20px);
+      color: #3b2a1f;
     }
-    .form-control:focus {
-      background: rgba(255, 255, 255, 0.1) !important;
-      color: white !important;
-      border-color: #00d2ff;
-      box-shadow: 0 0 10px rgba(0, 210, 255, 0.5);
+    .forgot-pin-input {
+      background: #fff7ed !important;
+      border-color: #fdba74 !important;
+      color: #7c2d12 !important;
+    }
+    .forgot-pin-input::placeholder {
+      color: #c2410c !important;
+    }
+    .forgot-pin-input:focus {
+      background: #ffffff !important;
+      color: #7c2d12 !important;
+      border-color: #ea580c !important;
+      box-shadow: 0 0 0 0.25rem rgba(234, 88, 12, 0.2);
     }
   `]
 })

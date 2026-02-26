@@ -55,12 +55,13 @@
 .modal-header h3 {
     margin: 0;
     font-size: 1.5rem;
+    color: #3b2a1f;
 }
 
 .btn-close {
     background: transparent;
     border: none;
-    color: #fff;
+    color: #7c2d12;
     font-size: 2rem;
     cursor: pointer;
     line-height: 1;
@@ -87,6 +88,7 @@
     position: relative;
     box-shadow: 0 10px 20px rgba(0, 0, 0, 0.3);
     transition: all 0.5s ease;
+    color: #f8fafc;
 }
 
 .virtual-card-preview.visa {
@@ -109,6 +111,7 @@
     font-size: 1.4rem;
     letter-spacing: 2px;
     margin: 1rem 0;
+    color: #f8fafc;
 }
 
 .card-details-row {
@@ -117,6 +120,7 @@
     text-transform: uppercase;
     font-size: 0.8rem;
     letter-spacing: 1px;
+    color: #e2e8f0;
 }
 
 /* Form Styling */
@@ -134,10 +138,10 @@
 .floating-label input {
     width: 100%;
     padding: 1rem;
-    background: rgba(255, 255, 255, 0.05);
-    border: 1px solid rgba(255, 255, 255, 0.1);
+    background: #fff7ed;
+    border: 1px solid #fdba74;
     border-radius: 8px;
-    color: #fff;
+    color: #7c2d12;
     font-size: 1rem;
     transition: all 0.3s;
 }
@@ -145,10 +149,10 @@
 .floating-label select {
     width: 100%;
     padding: 1rem;
-    background: rgba(255, 255, 255, 0.05);
-    border: 1px solid rgba(255, 255, 255, 0.1);
+    background: #fff7ed;
+    border: 1px solid #fdba74;
     border-radius: 8px;
-    color: #fff;
+    color: #7c2d12;
     font-size: 1rem;
     transition: all 0.3s;
 }
@@ -156,7 +160,7 @@
 .select-group label {
     display: block;
     margin-bottom: 0.5rem;
-    color: rgba(255, 255, 255, 0.8);
+    color: #7c2d12;
     font-size: 0.9rem;
 }
 
@@ -164,7 +168,7 @@
     position: absolute;
     left: 1rem;
     top: 1rem;
-    color: rgba(255, 255, 255, 0.5);
+    color: #9a3412;
     pointer-events: none;
     transition: all 0.3s ease;
 }
@@ -172,8 +176,9 @@
 .floating-label input:focus,
 .floating-label input:not(:placeholder-shown),
 .floating-label select:focus {
-    border-color: #4facfe;
-    background: rgba(255, 255, 255, 0.08);
+    border-color: #ea580c;
+    background: #ffffff;
+    color: #7c2d12;
 }
 
 .floating-label input:focus~label,
@@ -182,9 +187,13 @@
     top: -0.6rem;
     left: 0.8rem;
     font-size: 0.75rem;
-    color: #4facfe;
-    background: #1a1a1a;
+    color: #ea580c;
+    background: #fff7ed;
     padding: 0 0.4rem;
+}
+
+.floating-label input::placeholder {
+    color: #c2410c;
 }
 
 .toggle-wrapper {
@@ -193,9 +202,9 @@
     gap: 0.75rem;
     margin-bottom: 0.8rem;
     padding: 0.7rem 0.9rem;
-    border: 1px solid rgba(255, 255, 255, 0.14);
+    border: 1px solid #fed7aa;
     border-radius: 10px;
-    background: rgba(255, 255, 255, 0.05);
+    background: #fff7ed;
 }
 
 .toggle-control {
@@ -214,7 +223,7 @@
 .toggle-slider {
     position: absolute;
     inset: 0;
-    background: rgba(255, 255, 255, 0.22);
+    background: #fed7aa;
     border-radius: 999px;
     transition: 0.25s;
     cursor: pointer;
@@ -249,6 +258,7 @@
 .toggle-label {
     font-size: 0.9rem;
     cursor: pointer;
+    color: #7c2d12;
 }
 
 .default-card-hint {

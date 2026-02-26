@@ -13,7 +13,7 @@ export class AuthService {
   isLoggedIn() {
     throw new Error('Method not implemented.');
   }
-  private apiUrl = `${environment.apiUrl}/auth`;
+  private apiUrl = `${environment.apiUrl.replace(/\/v1$/, '')}/auth`;
   private currentUserSubject = new BehaviorSubject<User | null>(null);
   public currentUser$ = this.currentUserSubject.asObservable();
 
