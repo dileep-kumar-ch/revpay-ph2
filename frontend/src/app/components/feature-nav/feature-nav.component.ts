@@ -9,6 +9,10 @@ import { AuthService } from '../../services/auth.service';
 export class FeatureNavComponent {
   constructor(private authService: AuthService) { }
 
+  isBusinessAccount(): boolean {
+    return this.authService.isBusinessAccount();
+  }
+
   logout(): void {
     this.authService.logout();
   }

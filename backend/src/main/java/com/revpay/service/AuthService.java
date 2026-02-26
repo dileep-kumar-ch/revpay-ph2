@@ -1,6 +1,7 @@
 package com.revpay.service;
 
 import com.revpay.dto.*;
+import com.revpay.model.BusinessVerificationStatus;
 import com.revpay.model.Role;
 import com.revpay.model.User;
 import com.revpay.repository.UserRepository;
@@ -46,8 +47,10 @@ public class AuthService implements UserDetailsService {
                 if (role == Role.BUSINESS && (isBlank(request.getBusinessName())
                                 || isBlank(request.getBusinessType())
                                 || isBlank(request.getTaxId())
-                                || isBlank(request.getBusinessAddress()))) {
-                        throw new RuntimeException("Business details are required for BUSINESS accounts");
+                                || isBlank(request.getBusinessAddress())
+                                || isBlank(request.getVerificationDocsPath()))) {
+                        throw new RuntimeException(
+                                        "Business details and verification documents are required for BUSINESS accounts");
                 }
 
                 User user = User.builder()
@@ -62,6 +65,10 @@ public class AuthService implements UserDetailsService {
                                 .businessType(request.getBusinessType())
                                 .taxId(request.getTaxId())
                                 .businessAddress(request.getBusinessAddress())
+                                .verificationDocsPath(request.getVerificationDocsPath())
+                                .businessVerificationStatus(
+                                                role == Role.BUSINESS ? BusinessVerificationStatus.PENDING_VERIFICATION
+                                                                : BusinessVerificationStatus.NOT_SUBMITTED)
                                 .failedLoginAttempts(0)
                                 .build();
 

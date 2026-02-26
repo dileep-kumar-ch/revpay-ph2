@@ -40,12 +40,13 @@ export class RegisterComponent implements OnInit {
       businessName: [''],
       businessType: [''],
       taxId: [''],
-      businessAddress: ['']
+      businessAddress: [''],
+      verificationDocsPath: ['']
     });
 
     // Watch role changes to add/remove validators
     this.registerForm.get('role')?.valueChanges.subscribe(role => {
-      const businessFields = ['businessName', 'businessType', 'taxId', 'businessAddress'];
+      const businessFields = ['businessName', 'businessType', 'taxId', 'businessAddress', 'verificationDocsPath'];
       businessFields.forEach(field => {
         const ctrl = this.registerForm.get(field);
         if (role === 'BUSINESS') {

@@ -1,0 +1,125 @@
+.analytics-container {
+    max-width: 1100px;
+    margin: 0 auto;
+    padding: 1.5rem;
+    color: #e2e8f0;
+}
+
+.head {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    gap: 1rem;
+}
+
+.head h2 {
+    margin: 0;
+}
+
+.head p {
+    margin: 0.35rem 0 0;
+    color: #94a3b8;
+}
+
+.back-link {
+    color: #7dd3fc;
+    text-decoration: none;
+    border: 1px solid rgba(125, 211, 252, 0.45);
+    border-radius: 8px;
+    padding: 0.5rem 0.75rem;
+    font-weight: 600;
+}
+
+.filters {
+    margin-top: 1rem;
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.7rem;
+    align-items: flex-end;
+}
+
+.filters label {
+    display: grid;
+    gap: 0.35rem;
+}
+
+input,
+button {
+    border-radius: 8px;
+    border: 1px solid rgba(255, 255, 255, 0.2);
+    background: rgba(255, 255, 255, 0.06);
+    color: #f8fafc;
+    padding: 0.5rem 0.7rem;
+}
+
+button {
+    cursor: pointer;
+    font-weight: 600;
+}
+
+.stats-grid {
+    margin-top: 1rem;
+    display: grid;
+    gap: 0.8rem;
+    grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+}
+
+.tile {
+    background: rgba(15, 23, 42, 0.7);
+    border: 1px solid rgba(148, 163, 184, 0.18);
+    border-radius: 10px;
+    padding: 0.85rem;
+}
+
+.tile h4 {
+    margin: 0;
+    color: #cbd5e1;
+}
+
+.tile p {
+    margin: 0.4rem 0 0.2rem;
+    font-size: 1.25rem;
+    font-weight: 700;
+}
+
+.tile small {
+    color: #94a3b8;
+}
+
+.chart-panels {
+    margin-top: 1rem;
+    display: grid;
+    gap: 0.8rem;
+    grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+}
+
+.panel {
+    background: rgba(15, 23, 42, 0.65);
+    border: 1px solid rgba(148, 163, 184, 0.18);
+    border-radius: 10px;
+    padding: 0.85rem;
+}
+
+.panel h3 {
+    margin-top: 0;
+}
+
+.list-item {
+    display: flex;
+    justify-content: space-between;
+    padding: 0.45rem 0;
+    border-bottom: 1px solid rgba(148, 163, 184, 0.2);
+}
+
+.list-item:last-child {
+    border-bottom: none;
+}
+
+.alert {
+    margin-top: 0.9rem;
+    border: 1px solid rgba(248, 113, 113, 0.45);
+    background: rgba(127, 29, 29, 0.35);
+    color: #fecaca;
+    border-radius: 8px;
+    padding: 0.65rem 0.75rem;
+}

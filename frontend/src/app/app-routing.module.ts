@@ -11,6 +11,8 @@ import { SecuritySettingsComponent } from './components/security-settings/securi
 import { ForgotPinComponent } from './components/recovery/forgot-pin.component';
 import { AuthGuard } from './guards/auth.guard';
 import { PaymentMethodsComponent } from './components/payment-methods/payment-methods.component';
+import { BusinessComponent } from './components/business/business.component';
+import { BusinessAnalyticsComponent } from './components/business-analytics/business-analytics.component';
 
 const routes: Routes = [
   { path: 'login', component: LoginComponent },
@@ -43,6 +45,16 @@ const routes: Routes = [
   {
     path: 'payment-methods',
     component: PaymentMethodsComponent,
+    canActivate: [AuthGuard]
+  },
+  {
+    path: 'business',
+    component: BusinessComponent,
+    canActivate: [AuthGuard]
+  },
+  {
+    path: 'analytics',
+    component: BusinessAnalyticsComponent,
     canActivate: [AuthGuard]
   },
   { path: 'recovery', component: RecoveryComponent },

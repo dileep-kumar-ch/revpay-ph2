@@ -65,6 +65,8 @@ public class User implements UserDetails {
     private String taxId;
     private String businessAddress;
     private String verificationDocsPath;
+    @Enumerated(EnumType.STRING)
+    private BusinessVerificationStatus businessVerificationStatus;
 
 
     @Override
