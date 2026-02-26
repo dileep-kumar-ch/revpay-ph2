@@ -2,6 +2,7 @@ import { Component, OnInit } from '@angular/core';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { PaymentService } from '../../services/payment.service';
 import { TransactionService } from '../../services/transaction.service';
+import { NotificationService } from '../../services/notification.service';
 
 import { Wallet } from '../../models/wallet.model';
 
@@ -33,7 +34,7 @@ export class WalletComponent implements OnInit {
     private fb: FormBuilder,
     private paymentService: PaymentService,
     private transactionService: TransactionService,
-    
+    private notificationService: NotificationService
   ) { }
 
   ngOnInit(): void {
@@ -158,11 +159,13 @@ export class WalletComponent implements OnInit {
         this.applyFundingCardSelection();
         this.withdrawForm.reset();
         this.loadWallet();
+        this.notificationService.refreshUnreadCount();
         
         this.loading = false;
       },
       error: (error: any) => {
         this.errorMessage = error.error?.message || 'Operation failed. Please try again.';
+        this.notificationService.refreshUnreadCount();
         this.loading = false;
       }
     });

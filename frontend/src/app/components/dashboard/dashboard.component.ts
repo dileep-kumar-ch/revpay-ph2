@@ -1,29 +1,32 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnDestroy, OnInit } from '@angular/core';
 import { Router } from '@angular/router';
 import { AuthService } from '../../services/auth.service';
-import { WalletService } from '../../services/wallet.service';
 import { TransactionService } from '../../services/transaction.service';
 import { PaymentService } from '../../services/payment.service';
+import { NotificationService } from '../../services/notification.service';
 import { Wallet } from '../../models/wallet.model';
 import { Transaction } from '../../models/transaction.model';
+import { Subscription, interval } from 'rxjs';
 
 @Component({
   selector: 'app-dashboard',
   templateUrl: './dashboard.component.html',
   styleUrls: ['./dashboard.component.css']
 })
-export class DashboardComponent implements OnInit {
+export class DashboardComponent implements OnInit, OnDestroy {
   wallet: Wallet | null = null;
   recentTransactions: Transaction[] = [];
   username = '';
   loading = true;
   unreadNotifications = 0;
+  private unreadPollingSub: Subscription | null = null;
+  private unreadSub: Subscription | null = null;
 
   constructor(
     private authService: AuthService,
-    private walletService: WalletService,
     private transactionService: TransactionService,
     private paymentService: PaymentService,
+    private notificationService: NotificationService,
     private router: Router
   ) { }
 
@@ -32,7 +35,20 @@ export class DashboardComponent implements OnInit {
     this.username = user?.username || '';
 
     this.loadDashboardData();
-    this.loadUnreadCount();
+    this.unreadSub = this.notificationService.unreadCount$.subscribe(count => {
+      this.unreadNotifications = count;
+    });
+    this.notificationService.refreshUnreadCount();
+    this.unreadPollingSub = interval(10000).subscribe(() => this.notificationService.refreshUnreadCount());
+  }
+
+  ngOnDestroy(): void {
+    if (this.unreadPollingSub) {
+      this.unreadPollingSub.unsubscribe();
+    }
+    if (this.unreadSub) {
+      this.unreadSub.unsubscribe();
+    }
   }
 
   loadDashboardData(): void {
@@ -57,10 +73,6 @@ export class DashboardComponent implements OnInit {
         this.loading = false;
       }
     });
-  }
-
-  loadUnreadCount(): void {
-    this.unreadNotifications = 0;
   }
 
   logout(): void {

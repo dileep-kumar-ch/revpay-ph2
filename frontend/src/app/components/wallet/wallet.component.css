@@ -2,12 +2,13 @@
     padding: 2rem;
     max-width: 800px;
     margin: 0 auto;
+    color: #431407;
 }
 
 .glass-morphism {
-    background: rgba(255, 255, 255, 0.05);
+    background: #ffffff;
     backdrop-filter: blur(10px);
-    border: 1px solid rgba(255, 255, 255, 0.1);
+    border: 1px solid #fed7aa;
     border-radius: 12px;
 }
 
@@ -17,8 +18,8 @@
     align-items: center;
     padding: 2rem;
     margin-bottom: 2rem;
-    color: white;
-    background: linear-gradient(135deg, #1e3c72 0%, #2a5298 100%);
+    color: #7c2d12;
+    background: linear-gradient(135deg, #ffedd5 0%, #fed7aa 100%);
 }
 
 .balance-display .label {
@@ -38,7 +39,7 @@
 
 .tabs {
     display: flex;
-    background: rgba(0, 0, 0, 0.2);
+    background: #fff7ed;
 }
 
 .tabs button {
@@ -46,7 +47,7 @@
     padding: 1rem;
     border: none;
     background: none;
-    color: white;
+    color: #7c2d12;
     cursor: pointer;
     font-weight: 600;
     transition: background 0.3s;
@@ -54,19 +55,19 @@
 }
 
 .tabs button.active {
-    background: #00d2ff;
-    color: black;
+    background: #ea580c;
+    color: #fff;
     opacity: 1;
 }
 
 .tab-content {
     padding: 2rem;
-    color: white;
+    color: #431407;
 }
 
 .op-section h3 {
     margin-bottom: 1.5rem;
-    color: #00d2ff;
+    color: #c2410c;
 }
 
 .form-group {
@@ -77,16 +78,17 @@
     display: block;
     margin-bottom: 0.5rem;
     font-size: 0.9rem;
-    opacity: 0.8;
+    opacity: 1;
+    color: #7c2d12;
 }
 
 input.form-control:focus,
 select.form-select:focus,
 textarea.form-control:focus {
-    background: rgba(255, 255, 255, 0.15) !important;
-    border-color: #00d2ff;
-    box-shadow: 0 0 10px rgba(0, 210, 255, 0.3);
-    color: white !important;
+    background: #ffffff !important;
+    border-color: #ea580c;
+    box-shadow: 0 0 10px rgba(234, 88, 12, 0.2);
+    color: #431407 !important;
 }
 
 .input-group-text {
@@ -96,8 +98,8 @@ textarea.form-control:focus {
 .btn-primary {
     width: 100%;
     padding: 1rem;
-    background: #00d2ff;
-    color: black;
+    background: #ea580c;
+    color: #fff;
     border: none;
     border-radius: 8px;
     font-weight: bold;
@@ -106,9 +108,9 @@ textarea.form-control:focus {
 }
 
 .btn-primary:hover:not(:disabled) {
-    background: #00b8e6;
+    background: #c2410c;
     transform: translateY(-2px);
-    box-shadow: 0 5px 15px rgba(0, 210, 255, 0.4);
+    box-shadow: 0 5px 15px rgba(234, 88, 12, 0.3);
 }
 
 .btn-primary:disabled {
@@ -150,8 +152,8 @@ textarea.form-control:focus {
     flex: 1;
     padding: 0.8rem;
     background: rgba(255, 255, 255, 0.1);
-    color: white;
-    border: 1px solid rgba(255, 255, 255, 0.2);
+    color: #7c2d12;
+    border: 1px solid #fdba74;
     border-radius: 8px;
     cursor: pointer;
 }
@@ -161,6 +163,6 @@ select.form-select {
 }
 
 select.form-select option {
-    background: #1f2937;
-    color: #fff;
+    background: #fff7ed;
+    color: #431407;
 }

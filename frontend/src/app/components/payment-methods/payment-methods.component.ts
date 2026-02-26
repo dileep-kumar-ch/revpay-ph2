@@ -1,6 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { AbstractControl, FormBuilder, FormGroup, ValidationErrors, ValidatorFn, Validators } from '@angular/forms';
 import { PaymentService } from '../../services/payment.service';
+import { NotificationService } from '../../services/notification.service';
 import { Card, AddCardRequest } from '../../models/card.model';
 
 @Component({
@@ -18,7 +19,11 @@ export class PaymentMethodsComponent implements OnInit {
   success = '';
   private successTimerId?: number;
 
-  constructor(private fb: FormBuilder, private paymentService: PaymentService) {
+  constructor(
+    private fb: FormBuilder,
+    private paymentService: PaymentService,
+    private notificationService: NotificationService
+  ) {
     this.cardForm = this.fb.group({
       cardHolderName: ['', [Validators.required, Validators.pattern('^[A-Za-z ]+$')]],
       paymentMethodType: ['DEBIT', Validators.required],
@@ -105,6 +110,7 @@ export class PaymentMethodsComponent implements OnInit {
       this.paymentService.addCard(payload).subscribe({
         next: (card) => {
           this.showSuccess('Card added successfully');
+          this.notificationService.refreshUnreadCount();
           this.cardForm.reset({ paymentMethodType: 'DEBIT', setAsDefault: false });
 
           // Optimistic UI update, then sync from server for source-of-truth state.
@@ -155,6 +161,7 @@ export class PaymentMethodsComponent implements OnInit {
     this.paymentService.setDefaultCard(card.id).subscribe({
       next: () => {
         this.showSuccess('Default card updated successfully');
+        this.notificationService.refreshUnreadCount();
         this.settingDefaultCardId = null;
         this.loadCards();
       },
@@ -214,6 +221,7 @@ export class PaymentMethodsComponent implements OnInit {
       this.paymentService.deleteCard(id).subscribe({
         next: () => {
           this.showSuccess('Card removed successfully');
+          this.notificationService.refreshUnreadCount();
           this.loadCards();
         },
         error: (err) => {

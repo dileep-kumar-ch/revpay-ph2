@@ -4,14 +4,14 @@
     justify-content: center;
     align-items: center;
     min-height: 100vh;
-    background: linear-gradient(135deg, #1e3c72 0%, #2a5298 100%);
+    background: linear-gradient(135deg, #fff7ed 0%, #ffedd5 100%);
     padding: 3rem 1rem;
 }
 
 .branding-section {
     text-align: center;
     margin-bottom: 2rem;
-    color: white;
+    color: #431407;
 }
 
 .logo-large {
@@ -23,8 +23,8 @@
 }
 
 .logo-rp {
-    background: #00d2ff;
-    color: #1e3c72;
+    background: #f97316;
+    color: #ffffff;
     padding: 8px 12px;
     border-radius: 10px;
     font-size: 2.5rem;
@@ -53,12 +53,12 @@
 
 h2 {
     margin: 0 0 0.5rem 0;
-    color: #333;
+    color: #9a3412;
     font-size: 1.8rem;
 }
 
 .subtitle {
-    color: #666;
+    color: #7c2d12;
     margin: 0 0 2rem 0;
 }
 
@@ -75,7 +75,7 @@ h2 {
 label {
     display: block;
     margin-bottom: 0.5rem;
-    color: #333;
+    color: #7c2d12;
     font-weight: 500;
 }
 
@@ -92,7 +92,7 @@ label {
 
 .form-control:focus {
     outline: none;
-    border-color: #667eea;
+    border-color: #ea580c;
     color: #111827 !important;
 }
 
@@ -113,7 +113,7 @@ select.form-control option {
 }
 
 .business-section {
-    background: #f8f9fa;
+    background: #fff7ed;
     padding: 1.5rem;
     border-radius: 8px;
     margin-bottom: 1.5rem;
@@ -122,16 +122,16 @@ select.form-control option {
 .business-section h3,
 .security-questions-section h3 {
     margin: 0 0 1rem 0;
-    color: #667eea;
+    color: #c2410c;
     font-size: 1.2rem;
 }
 
 .security-questions-section {
-    background: #f0f4ff;
+    background: #fff7ed;
     padding: 1.5rem;
     border-radius: 8px;
     margin-bottom: 1.5rem;
-    border-left: 4px solid #667eea;
+    border-left: 4px solid #f97316;
 }
 
 .error-message {
@@ -146,7 +146,7 @@ select.form-control option {
 .btn-primary {
     width: 100%;
     padding: 0.875rem;
-    background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+    background: linear-gradient(135deg, #ea580c 0%, #f97316 100%);
     color: white;
     border: none;
     border-radius: 6px;
@@ -158,7 +158,7 @@ select.form-control option {
 
 .btn-primary:hover:not(:disabled) {
     transform: translateY(-2px);
-    box-shadow: 0 5px 15px rgba(102, 126, 234, 0.4);
+    box-shadow: 0 5px 15px rgba(234, 88, 12, 0.35);
 }
 
 .btn-primary:disabled {
@@ -173,7 +173,7 @@ select.form-control option {
 }
 
 .login-link a {
-    color: #667eea;
+    color: #c2410c;
     text-decoration: none;
     font-weight: 600;
 }

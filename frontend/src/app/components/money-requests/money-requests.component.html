@@ -1,38 +1,38 @@
 <app-feature-nav></app-feature-nav>
 
-<div class="container py-4">
+<div class="requests-page">
     <div class="d-flex justify-content-between align-items-center mb-4">
-        <h2 class="text-white mb-0">Money Requests</h2>
+        <h2 class="page-title mb-0">Money Requests</h2>
     </div>
     <div class="row">
         <!-- Request Money Form -->
         <div class="col-md-4">
-            <div class="card glass-morphism mb-4 border-0 shadow-lg text-white">
-                <div class="card-header border-0 pb-0">
+            <div class="card panel-card mb-4">
+                <div class="card-header panel-header border-0 pb-0">
                     <h5 class="mb-0">Request Money</h5>
                 </div>
                 <div class="card-body">
                     <form [formGroup]="requestForm" (ngSubmit)="onSubmit()">
                         <div class="mb-3">
-                            <label class="form-label opacity-75 small">Recipient Username/Email</label>
+                            <label class="form-label small">Recipient Username/Email</label>
                             <div class="input-group">
-                                <span class="input-group-text bg-transparent border-end-0 text-white"><i
+                                <span class="input-group-text bg-transparent border-end-0"><i
                                         class="bi bi-person"></i></span>
-                                <input type="text" class="form-control bg-transparent text-white border-start-0"
+                                <input type="text" class="form-control bg-transparent border-start-0"
                                     formControlName="payerUsername" placeholder="Enter username or email">
                             </div>
                         </div>
                         <div class="mb-3">
-                            <label class="form-label opacity-75 small">Amount</label>
+                            <label class="form-label small">Amount</label>
                             <div class="input-group">
-                                <span class="input-group-text bg-transparent border-end-0 text-white">$</span>
-                                <input type="number" class="form-control bg-transparent text-white border-start-0"
+                                <span class="input-group-text bg-transparent border-end-0">$</span>
+                                <input type="number" class="form-control bg-transparent border-start-0"
                                     formControlName="amount" placeholder="0.00">
                             </div>
                         </div>
                         <div class="mb-3">
-                            <label class="form-label opacity-75 small">Note</label>
-                            <textarea class="form-control bg-transparent text-white" formControlName="note" rows="2"
+                            <label class="form-label small">Note</label>
+                            <textarea class="form-control bg-transparent" formControlName="note" rows="2"
                                 placeholder="What is this for?"></textarea>
                         </div>
 
@@ -54,23 +54,23 @@
 
         <!-- Requests List -->
         <div class="col-md-8">
-            <div class="card glass-morphism border-0 shadow-lg text-white">
-                <div class="card-header border-0 d-flex justify-content-between align-items-center">
+            <div class="card panel-card">
+                <div class="card-header panel-header border-0 d-flex justify-content-between align-items-center">
                     <h5 class="mb-0">Manage Requests</h5>
-                    <button class="btn btn-sm btn-outline-light border-0" (click)="loadRequests()">
+                    <button class="btn btn-sm btn-outline-secondary border-0" (click)="loadRequests()">
                         <i class="bi bi-arrow-clockwise"></i> Refresh
                     </button>
                 </div>
                 <div class="card-body p-0">
-                    <ul class="nav nav-tabs nav-fill border-0 bg-black bg-opacity-20" id="requestTabs" role="tablist">
+                    <ul class="nav nav-tabs nav-fill border-0 request-tabs" id="requestTabs" role="tablist">
                         <li class="nav-item">
-                            <button class="nav-link active border-0 text-white py-3" data-bs-toggle="tab"
+                            <button class="nav-link active border-0 py-3" data-bs-toggle="tab"
                                 data-bs-target="#incoming">
                                 Incoming ({{ incomingRequests.length }})
                             </button>
                         </li>
                         <li class="nav-item">
-                            <button class="nav-link border-0 text-white py-3 opacity-50" data-bs-toggle="tab"
+                            <button class="nav-link border-0 py-3" data-bs-toggle="tab"
                                 data-bs-target="#outgoing">
                                 Outgoing ({{ outgoingRequests.length }})
                             </button>
@@ -85,13 +85,13 @@
                             </div>
 
                             <div *ngIf="!loading && incomingRequests.length === 0"
-                                class="text-center py-5 text-white-50">
+                                class="text-center py-5 empty-text">
                                 <i class="bi bi-inbox h1 d-block mb-3 opacity-25"></i>
                                 No incoming money requests.
                             </div>
 
                             <div *ngFor="let req of incomingRequests"
-                                class="card mb-3 request-item-card border-0 text-white hover-up overflow-hidden">
+                                class="card mb-3 request-item-card border-0 hover-up overflow-hidden">
                                 <div class="card-body d-flex justify-content-between align-items-center py-3 px-4">
                                     <div class="d-flex align-items-center">
                                         <div class="avatar me-3 bg-primary bg-opacity-25 rounded-circle d-flex align-items-center justify-content-center"
@@ -100,24 +100,24 @@
                                         </div>
                                         <div>
                                             <h6 class="mb-0 fw-bold">From: {{ getDisplayName(req.requester) }}</h6>
-                                            <p class="mb-1 small text-white-50"
+                                            <p class="mb-1 small"
                                                 *ngIf="getSecondaryIdentity(req.requester)">
                                                 {{ getSecondaryIdentity(req.requester) }}
                                             </p>
-                                            <p class="mb-0 small text-white-50">{{ req.note }}</p>
-                                            <small class="text-white-50 opacity-50" style="font-size: 0.75rem;">{{
+                                            <p class="mb-0 small">{{ req.note }}</p>
+                                            <small class="opacity-75" style="font-size: 0.75rem;">{{
                                                 req.createdAt | date:'medium' }}</small>
                                         </div>
                                     </div>
                                     <div class="text-end">
-                                        <div class="h5 mb-2 text-info fw-bold">${{ req.amount | number:'1.2-2' }}</div>
+                                        <div class="h5 mb-2 amount-highlight fw-bold">${{ req.amount | number:'1.2-2' }}</div>
                                         <div *ngIf="req.status === 'PENDING'" class="btn-group btn-group-sm">
                                             <button class="btn btn-success px-3"
                                                 (click)="respond(req.id, true)">Accept</button>
                                             <button class="btn btn-outline-danger"
                                                 (click)="respond(req.id, false)">Decline</button>
                                         </div>
-                                        <small *ngIf="req.status === 'PENDING'" class="d-block mt-1 text-white-50">
+                                        <small *ngIf="req.status === 'PENDING'" class="d-block mt-1">
                                             Accept asks PIN and sends money instantly.
                                         </small>
                                         <span *ngIf="req.status !== 'PENDING'" class="badge border-0 font-monospace"
@@ -136,13 +136,13 @@
                             </div>
 
                             <div *ngIf="!loading && outgoingRequests.length === 0"
-                                class="text-center py-5 text-white-50">
+                                class="text-center py-5 empty-text">
                                 <i class="bi bi-send h1 d-block mb-3 opacity-25"></i>
                                 You haven't requested money from anyone.
                             </div>
 
                             <div *ngFor="let req of outgoingRequests"
-                                class="card mb-3 request-item-card border-0 text-white">
+                                class="card mb-3 request-item-card border-0">
                                 <div class="card-body d-flex justify-content-between align-items-center py-3 px-4">
                                     <div class="d-flex align-items-center">
                                         <div class="avatar me-3 bg-info bg-opacity-10 rounded-circle d-flex align-items-center justify-content-center"
@@ -151,16 +151,16 @@
                                         </div>
                                         <div>
                                             <h6 class="mb-0">To: {{ getDisplayName(req.payer) }}</h6>
-                                            <p class="mb-1 small text-white-50" *ngIf="getSecondaryIdentity(req.payer)">
+                                            <p class="mb-1 small" *ngIf="getSecondaryIdentity(req.payer)">
                                                 {{ getSecondaryIdentity(req.payer) }}
                                             </p>
-                                            <p class="mb-0 small text-white-50">{{ req.note }}</p>
-                                            <small class="text-white-50 opacity-50">{{ req.createdAt | date:'medium'
+                                            <p class="mb-0 small">{{ req.note }}</p>
+                                            <small class="opacity-75">{{ req.createdAt | date:'medium'
                                                 }}</small>
                                         </div>
                                     </div>
                                     <div class="text-end">
-                                        <div class="h5 mb-2 fw-bold text-white">${{ req.amount | number:'1.2-2' }}</div>
+                                        <div class="h5 mb-2 fw-bold amount-highlight">${{ req.amount | number:'1.2-2' }}</div>
                                         <span class="badge border-0 font-monospace"
                                             [ngClass]="{'bg-warning bg-opacity-25 text-warning': req.status === 'PENDING', 'bg-success bg-opacity-25 text-success': req.status === 'ACCEPTED', 'bg-danger bg-opacity-25 text-danger': req.status === 'DECLINED', 'bg-secondary bg-opacity-25 text-secondary': req.status === 'CANCELLED'}">
                                             {{ req.status }}

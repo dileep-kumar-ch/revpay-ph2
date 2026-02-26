@@ -20,6 +20,7 @@ import { FeatureNavComponent } from './components/feature-nav/feature-nav.compon
 import { PaymentMethodsComponent } from './components/payment-methods/payment-methods.component';
 import { BusinessComponent } from './components/business/business.component';
 import { BusinessAnalyticsComponent } from './components/business-analytics/business-analytics.component';
+import { NotificationsComponent } from './components/notifications/notifications.component';
 
 @NgModule({
   declarations: [
@@ -37,7 +38,8 @@ import { BusinessAnalyticsComponent } from './components/business-analytics/busi
     FeatureNavComponent,
     PaymentMethodsComponent,
     BusinessComponent,
-    BusinessAnalyticsComponent
+    BusinessAnalyticsComponent,
+    NotificationsComponent
   ],
   imports: [
     BrowserModule,

@@ -3,17 +3,17 @@
   flex-direction: row;
   align-items: stretch;
   min-height: 100vh;
-  background: linear-gradient(135deg, #081a44 0%, #0f2d74 45%, #1e3c72 100%);
+  background: linear-gradient(135deg, #fff7ed 0%, #ffedd5 45%, #fed7aa 100%);
 }
 
 .intro-panel {
   width: 50%;
   padding: 3.5rem;
-  color: white;
+  color: #431407;
   display: flex;
   flex-direction: column;
   justify-content: center;
-  background: linear-gradient(180deg, rgba(14, 34, 84, 0.92) 0%, rgba(8, 21, 52, 0.92) 100%);
+  background: linear-gradient(180deg, rgba(255, 237, 213, 0.95) 0%, rgba(255, 247, 237, 0.95) 100%);
 }
 
 .branding-section {
@@ -29,13 +29,13 @@
 }
 
 .logo-rp {
-  background: #00d2ff;
-  color: #1e3c72;
+  background: #f97316;
+  color: #ffffff;
   padding: 8px 12px;
   border-radius: 10px;
   font-size: 2.2rem;
   font-weight: 800;
-  box-shadow: 0 4px 15px rgba(0, 210, 255, 0.4);
+  box-shadow: 0 4px 15px rgba(249, 115, 22, 0.35);
 }
 
 .logo-name {
@@ -69,8 +69,8 @@
 }
 
 .feature-item {
-  background: rgba(216, 122, 122, 0.1);
-  border: 1px solid rgba(255, 255, 255, 0.15);
+  background: rgba(251, 146, 60, 0.12);
+  border: 1px solid #fdba74;
   border-radius: 10px;
   padding: 0.75rem 0.9rem;
 }
@@ -96,12 +96,12 @@
 
 h2 {
   margin: 0 0 0.5rem 0;
-  color: #333;
+  color: #9a3412;
   font-size: 1.8rem;
 }
 
 .subtitle {
-  color: #666;
+  color: #7c2d12;
   margin: 0 0 2rem 0;
 }
 
@@ -112,7 +112,7 @@ h2 {
 label {
   display: block;
   margin-bottom: 0.5rem;
-  color: #333;
+  color: #7c2d12;
   font-weight: 500;
 }
 
@@ -129,7 +129,7 @@ label {
 
 .form-control:focus {
   outline: none;
-  border-color: #667eea;
+  border-color: #ea580c;
   color: #111827 !important;
 }
 
@@ -162,7 +162,7 @@ label {
 .btn-primary {
   width: 100%;
   padding: 0.875rem;
-  background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+  background: linear-gradient(135deg, #ea580c 0%, #f97316 100%);
   color: white;
   border: none;
   border-radius: 6px;
@@ -174,7 +174,7 @@ label {
 
 .btn-primary:hover:not(:disabled) {
   transform: translateY(-2px);
-  box-shadow: 0 5px 15px rgba(102, 126, 234, 0.4);
+  box-shadow: 0 5px 15px rgba(234, 88, 12, 0.35);
 }
 
 .btn-primary:disabled {
@@ -189,9 +189,13 @@ label {
 }
 
 .register-link a {
-  color: #667eea;
+  color: #c2410c;
   text-decoration: none;
   font-weight: 600;
+}
+
+.forgot-password a {
+  color: #c2410c;
 }
 
 .register-link a:hover {
@@ -223,3 +227,5 @@ label {
     padding: 2rem 1.25rem;
   }
 }
+
+

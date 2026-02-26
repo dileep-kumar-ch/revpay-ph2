@@ -2,6 +2,7 @@ import { Component, OnInit } from '@angular/core';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { MoneyRequestService, MoneyRequest } from '../../services/money-request.service';
 import { AuthService } from '../../services/auth.service';
+import { NotificationService } from '../../services/notification.service';
 
 @Component({
   selector: 'app-money-requests',
@@ -24,7 +25,8 @@ export class MoneyRequestsComponent implements OnInit {
   constructor(
     private fb: FormBuilder,
     private moneyRequestService: MoneyRequestService,
-    private authService: AuthService
+    private authService: AuthService,
+    private notificationService: NotificationService
   ) {
     this.requestForm = this.fb.group({
       payerUsername: ['', Validators.required],
@@ -68,6 +70,7 @@ export class MoneyRequestsComponent implements OnInit {
         this.message = 'Money request sent successfully!';
         this.requestForm.reset();
         this.loadRequests();
+        this.notificationService.refreshUnreadCount();
         this.submitting = false;
       },
       error: (err) => {
@@ -104,6 +107,7 @@ export class MoneyRequestsComponent implements OnInit {
       next: () => {
         this.loadRequests();
         this.message = accept ? 'Request accepted!' : 'Request declined.';
+        this.notificationService.refreshUnreadCount();
       },
       error: (err) => {
         this.error = err.error?.message || 'Failed to respond to request';
