@@ -10,6 +10,7 @@ import { RecoveryComponent } from './components/recovery/recovery.component';
 import { SecuritySettingsComponent } from './components/security-settings/security-settings.component';
 import { ForgotPinComponent } from './components/recovery/forgot-pin.component';
 import { AuthGuard } from './guards/auth.guard';
+import { PaymentMethodsComponent } from './components/payment-methods/payment-methods.component';
 
 const routes: Routes = [
   { path: 'login', component: LoginComponent },
@@ -37,6 +38,11 @@ const routes: Routes = [
   {
     path: 'security',
     component: SecuritySettingsComponent,
+    canActivate: [AuthGuard]
+  },
+  {
+    path: 'payment-methods',
+    component: PaymentMethodsComponent,
     canActivate: [AuthGuard]
   },
   { path: 'recovery', component: RecoveryComponent },

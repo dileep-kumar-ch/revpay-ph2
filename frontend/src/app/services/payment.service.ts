@@ -1,27 +1,58 @@
 import { Injectable } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
-import { Observable } from 'rxjs';
+import { map, Observable } from 'rxjs';
 import { environment } from '../../environments/environment';
-import { Wallet } from '../models/wallet.model';
+import { Card, AddCardRequest } from '../models/card.model';
 
 @Injectable({
-  providedIn: 'root'
+    providedIn: 'root'
 })
 export class PaymentService {
-  private walletUrl = `${environment.apiUrl}/wallet`;
+    private cardsUrl = `${environment.apiUrl}/cards`;
+    private walletUrl = `${environment.apiUrl}/wallet`;
 
-  constructor(private http: HttpClient) {}
+    constructor(private http: HttpClient) { }
 
-  // Wallet Operations
-  getBalance(): Observable<Wallet> {
-    return this.http.get<Wallet>(`${this.walletUrl}/balance`);
-  }
+    private normalizeCard(card: any): Card {
+        return {
+            ...card,
+            isDefault: card?.isDefault ?? card?.defaultCard ?? card?.default ?? false
+        } as Card;
+    }
 
-  addFunds(amount: number): Observable<Wallet> {
-    return this.http.post<Wallet>(`${this.walletUrl}/add-funds`, { amount });
-  }
+    // Card Operations
+    getCards(): Observable<Card[]> {
+        return this.http.get<any[]>(this.cardsUrl).pipe(
+            map(cards => (cards || []).map(card => this.normalizeCard(card)))
+        );
+    }
 
-  withdrawFunds(amount: number): Observable<Wallet> {
-    return this.http.post<Wallet>(`${this.walletUrl}/withdraw`, { amount });
-  }
+    addCard(card: AddCardRequest): Observable<Card> {
+        return this.http.post<any>(this.cardsUrl, card).pipe(
+            map(response => this.normalizeCard(response))
+        );
+    }
+
+    deleteCard(id: number): Observable<any> {
+        return this.http.delete(`${this.cardsUrl}/${id}`);
+    }
+
+    setDefaultCard(id: number): Observable<Card> {
+        return this.http.patch<any>(`${this.cardsUrl}/${id}/default`, {}).pipe(
+            map(response => this.normalizeCard(response))
+        );
+    }
+
+    // Wallet Operations
+    getBalance(): Observable<any> {
+        return this.http.get(`${this.walletUrl}/balance`);
+    }
+
+    addFunds(amount: number, cardId: number): Observable<any> {
+        return this.http.post(`${this.walletUrl}/add-funds`, { amount, cardId });
+    }
+
+    withdrawFunds(amount: number): Observable<any> {
+        return this.http.post(`${this.walletUrl}/withdraw`, { amount });
+    }
 }

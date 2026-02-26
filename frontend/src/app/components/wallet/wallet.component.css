@@ -155,3 +155,12 @@ textarea.form-control:focus {
     border-radius: 8px;
     cursor: pointer;
 }
+
+select.form-select {
+    border-color: rgba(255, 255, 255, 0.2);
+}
+
+select.form-select option {
+    background: #1f2937;
+    color: #fff;
+}

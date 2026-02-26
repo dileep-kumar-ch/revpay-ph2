@@ -17,6 +17,7 @@ import { ForgotPinComponent } from './components/recovery/forgot-pin.component';
 import { PinVerificationComponent } from './components/security-settings/pin-verification.component';
 import { RecoveryComponent } from './components/recovery/recovery.component';
 import { FeatureNavComponent } from './components/feature-nav/feature-nav.component';
+import { PaymentMethodsComponent } from './components/payment-methods/payment-methods.component';
 
 @NgModule({
   declarations: [
@@ -31,7 +32,8 @@ import { FeatureNavComponent } from './components/feature-nav/feature-nav.compon
     RecoveryComponent,
     PinVerificationComponent,
     ForgotPinComponent,
-    FeatureNavComponent
+    FeatureNavComponent,
+    PaymentMethodsComponent
   ],
   imports: [
     BrowserModule,
