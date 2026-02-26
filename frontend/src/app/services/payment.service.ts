@@ -1,6 +1,6 @@
 import { Injectable } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
-import { Observable } from 'rxjs';
+import { map, Observable } from 'rxjs';
 import { environment } from '../../environments/environment';
 import { Card, AddCardRequest } from '../models/card.model';
 
@@ -13,13 +13,24 @@ export class PaymentService {
 
     constructor(private http: HttpClient) { }
 
+    private normalizeCard(card: any): Card {
+        return {
+            ...card,
+            isDefault: card?.isDefault ?? card?.defaultCard ?? card?.default ?? false
+        } as Card;
+    }
+
     // Card Operations
     getCards(): Observable<Card[]> {
-        return this.http.get<Card[]>(this.cardsUrl);
+        return this.http.get<any[]>(this.cardsUrl).pipe(
+            map(cards => (cards || []).map(card => this.normalizeCard(card)))
+        );
     }
 
     addCard(card: AddCardRequest): Observable<Card> {
-        return this.http.post<Card>(this.cardsUrl, card);
+        return this.http.post<any>(this.cardsUrl, card).pipe(
+            map(response => this.normalizeCard(response))
+        );
     }
 
     deleteCard(id: number): Observable<any> {
@@ -27,7 +38,9 @@ export class PaymentService {
     }
 
     setDefaultCard(id: number): Observable<Card> {
-        return this.http.patch<Card>(`${this.cardsUrl}/${id}/default`, {});
+        return this.http.patch<any>(`${this.cardsUrl}/${id}/default`, {}).pipe(
+            map(response => this.normalizeCard(response))
+        );
     }
 
     // Wallet Operations
