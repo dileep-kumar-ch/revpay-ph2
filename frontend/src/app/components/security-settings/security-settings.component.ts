@@ -20,7 +20,7 @@ export class SecuritySettingsComponent implements OnInit {
 
   ngOnInit(): void {
     this.pinForm = this.fb.group({
-      pin: ['', [Validators.required, Validators.minLength(4), Validators.maxLength(6), Validators.pattern('^[0-9]*$')]],
+      pin: ['', [Validators.required, Validators.pattern('^[0-9]{4}$')]],
       confirmPin: ['', Validators.required]
     }, { validator: this.passwordMatchValidator });
   }

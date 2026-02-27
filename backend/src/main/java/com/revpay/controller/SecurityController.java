@@ -22,8 +22,8 @@ public class SecurityController {
             @AuthenticationPrincipal UserDetails userDetails,
             @RequestBody Map<String, String> body) {
         String pin = body.get("pin");
-        if (pin == null || pin.length() < 4) {
-            return ResponseEntity.badRequest().body(Map.of("message", "Invalid PIN format"));
+        if (pin == null || !pin.matches("\\d{4}")) {
+            return ResponseEntity.badRequest().body(Map.of("message", "Invalid PIN format. PIN must be exactly 4 digits."));
         }
         authService.setTransactionPin(userDetails.getUsername(), pin);
         return ResponseEntity.ok(Map.of("message", "Transaction PIN set successfully"));
@@ -34,6 +34,9 @@ public class SecurityController {
             @AuthenticationPrincipal UserDetails userDetails,
             @RequestBody Map<String, String> body) {
         String pin = body.get("pin");
+        if (pin == null || !pin.matches("\\d{4}")) {
+            return ResponseEntity.badRequest().body(Map.of("valid", false, "message", "PIN must be exactly 4 digits."));
+        }
         boolean isValid = authService.verifyTransactionPin(userDetails.getUsername(), pin);
         if (isValid) {
             return ResponseEntity.ok(Map.of("valid", true));
@@ -60,6 +63,9 @@ public class SecurityController {
         String email = (String) body.get("email");
         String newPin = (String) body.get("newPin");
         List<Map<String, String>> answers = (List<Map<String, String>>) body.get("answers");
+        if (newPin == null || !newPin.matches("\\d{4}")) {
+            return ResponseEntity.badRequest().body(Map.of("message", "PIN must be exactly 4 digits."));
+        }
 
         boolean success = authService.resetTransactionPinWithQuestions(email, answers, newPin);
         if (success) {

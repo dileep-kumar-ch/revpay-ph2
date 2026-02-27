@@ -141,6 +141,7 @@ public class AuthService implements UserDetailsService {
 
         public void setTransactionPin(String username, String pin) {
                 User user = userRepository.findByUsername(username)
+                                .or(() -> userRepository.findByEmail(username))
                                 .orElseThrow(() -> new UsernameNotFoundException("User not found"));
                 user.setTransactionPin(passwordEncoder.encode(pin));
                 userRepository.save(user);
@@ -148,6 +149,7 @@ public class AuthService implements UserDetailsService {
 
         public boolean verifyTransactionPin(String username, String pin) {
                 User user = userRepository.findByUsername(username)
+                                .or(() -> userRepository.findByEmail(username))
                                 .orElseThrow(() -> new UsernameNotFoundException("User not found"));
                 if (user.getTransactionPin() == null) {
                         throw new RuntimeException("Transaction PIN not set");

@@ -16,11 +16,13 @@ import { AuthService } from '../../services/auth.service';
             <p class="text-white-50 mb-4">Please enter your 4-digit transaction PIN to authorize this transfer.</p>
             
             <div class="d-flex justify-content-center gap-2 mb-4">
-              <input *ngFor="let i of [0,1,2,3]" 
+                <input *ngFor="let i of [0,1,2,3]" 
                      #pinInput
                      type="password" 
                      class="form-control pin-input" 
                      maxlength="1" 
+                     inputmode="numeric"
+                     pattern="[0-9]*"
                      [(ngModel)]="pinValues[i]"
                      (keyup)="onKeyUp($event, i)"
                      (paste)="onPaste($event)"
@@ -95,6 +97,7 @@ export class PinVerificationComponent {
     }
 
     onKeyUp(event: any, index: number): void {
+        this.pinValues[index] = (this.pinValues[index] || '').replace(/\D/g, '');
         if (event.key === 'Backspace' && !this.pinValues[index] && index > 0) {
             const inputs = document.querySelectorAll('.pin-input');
             (inputs[index - 1] as HTMLElement).focus();

@@ -1,14 +1,19 @@
 package com.revpay.service;
 
 import com.revpay.dto.NotificationEvent;
+import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Component;
 
 @Component
 @Slf4j
+@RequiredArgsConstructor
 public class LoggingNotificationEventPublisher implements NotificationEventPublisher {
+    private final NotificationService notificationService;
+
     @Override
     public void publish(NotificationEvent event) {
+        notificationService.publish(event);
         log.info("notification_event recipient={} category={} type={} title={} metadata={}",
                 event.getRecipientUserId(),
                 event.getCategory(),

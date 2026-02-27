@@ -2,6 +2,7 @@ package com.revpay.service;
 
 import com.revpay.dto.CreateMoneyRequestDto;
 import com.revpay.dto.MoneyRequestResponse;
+import com.revpay.dto.NotificationEvent;
 import com.revpay.dto.SendMoneyRequest;
 import com.revpay.model.*;
 import com.revpay.repository.MoneyRequestRepository;
@@ -13,7 +14,9 @@ import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.stereotype.Service;
 
 import java.sql.Timestamp;
+import java.time.LocalDateTime;
 import java.util.List;
+import java.util.Map;
 import java.util.Objects;
 import java.util.stream.Collectors;
 
@@ -24,11 +27,16 @@ public class MoneyRequestService {
     private final MoneyRequestRepository moneyRequestRepository;
     private final UserRepository userRepository;
     private final TransactionService transactionService;
+    private final NotificationEventPublisher notificationEventPublisher;
 
-    public MoneyRequestService(MoneyRequestRepository moneyRequestRepository, UserRepository userRepository, TransactionService transactionService) {
+    public MoneyRequestService(MoneyRequestRepository moneyRequestRepository,
+            UserRepository userRepository,
+            TransactionService transactionService,
+            NotificationEventPublisher notificationEventPublisher) {
         this.moneyRequestRepository = moneyRequestRepository;
         this.userRepository = userRepository;
         this.transactionService = transactionService;
+        this.notificationEventPublisher = notificationEventPublisher;
     }
 
     public MoneyRequest createRequest(String requesterUsername, CreateMoneyRequestDto dto) {
@@ -54,7 +62,39 @@ public class MoneyRequestService {
 
         MoneyRequest savedRequest = moneyRequestRepository.save(request);
 
-        
+        String requesterCounterparty = payer.getEmail() != null ? payer.getEmail() : payer.getUsername();
+        String payerCounterparty = requester.getEmail() != null ? requester.getEmail() : requester.getUsername();
+
+        notificationEventPublisher.publish(NotificationEvent.builder()
+                .recipientUserId(requester.getId())
+                .category(NotificationCategory.REQUESTS)
+                .type("MONEY_REQUEST_SENT")
+                .title("Money request sent")
+                .message("Money request sent to " + requesterCounterparty + " for $" + dto.getAmount())
+                .metadata(Map.of(
+                        "requestId", savedRequest.getId(),
+                        "amount", dto.getAmount(),
+                        "counterparty", requesterCounterparty,
+                        "status", RequestStatus.PENDING.name(),
+                        "navigation", "/requests/" + savedRequest.getId(),
+                        "eventTime", savedRequest.getCreatedAt().toString()))
+                .build());
+
+        notificationEventPublisher.publish(NotificationEvent.builder()
+                .recipientUserId(payer.getId())
+                .category(NotificationCategory.REQUESTS)
+                .type("MONEY_REQUEST_RECEIVED")
+                .title("Money requested from you")
+                .message("Money requested from " + payerCounterparty + " for $" + dto.getAmount())
+                .metadata(Map.of(
+                        "requestId", savedRequest.getId(),
+                        "amount", dto.getAmount(),
+                        "counterparty", payerCounterparty,
+                        "status", RequestStatus.PENDING.name(),
+                        "navigation", "/requests/" + savedRequest.getId(),
+                        "eventTime", savedRequest.getCreatedAt().toString()))
+                .build());
+
         return savedRequest;
     }
 
@@ -104,7 +144,21 @@ public class MoneyRequestService {
 
         // Notify requester of response
         String status = accept ? "accepted" : "declined";
-    
+        String payerCounterparty = user.getEmail() != null ? user.getEmail() : user.getUsername();
+        notificationEventPublisher.publish(NotificationEvent.builder()
+                .recipientUserId(request.getRequester().getId())
+                .category(NotificationCategory.REQUESTS)
+                .type(accept ? "MONEY_REQUEST_ACCEPTED" : "MONEY_REQUEST_DECLINED")
+                .title(accept ? "Money request accepted" : "Money request declined")
+                .message("Your request to " + payerCounterparty + " was " + status + ".")
+                .metadata(Map.of(
+                        "requestId", request.getId(),
+                        "amount", request.getAmount(),
+                        "counterparty", payerCounterparty,
+                        "status", request.getStatus().name(),
+                        "navigation", "/requests/" + request.getId(),
+                        "eventTime", LocalDateTime.now().toString()))
+                .build());
     }
 
     private MoneyRequestResponse mapRowToResponse(Object[] row) {
