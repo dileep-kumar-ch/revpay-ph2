@@ -138,4 +138,8 @@ export class MoneyRequestsComponent implements OnInit {
     if (!user) return '';
     return user.email || user.username || '';
   }
+
+  getStatusLabel(status: string): string {
+    return (status || '').replace(/_/g, ' ');
+  }
 }

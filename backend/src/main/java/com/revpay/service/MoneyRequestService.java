@@ -39,6 +39,7 @@ public class MoneyRequestService {
         this.notificationEventPublisher = notificationEventPublisher;
     }
 
+    @Transactional
     public MoneyRequest createRequest(String requesterUsername, CreateMoneyRequestDto dto) {
         User requester = userRepository.findByUsername(requesterUsername)
                 .or(() -> userRepository.findByEmail(requesterUsername))

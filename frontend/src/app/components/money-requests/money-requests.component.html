@@ -120,9 +120,12 @@
                                         <small *ngIf="req.status === 'PENDING'" class="d-block mt-1">
                                             Accept asks PIN and sends money instantly.
                                         </small>
-                                        <span *ngIf="req.status !== 'PENDING'" class="badge border-0 font-monospace"
-                                            [ngClass]="{'bg-success bg-opacity-25 text-success': req.status === 'ACCEPTED', 'bg-danger bg-opacity-25 text-danger': req.status === 'DECLINED'}">
-                                            {{ req.status }}
+                                        <span *ngIf="req.status !== 'PENDING'" class="request-status"
+                                            [ngClass]="{
+                                                'status-accepted': req.status === 'ACCEPTED',
+                                                'status-declined': req.status === 'DECLINED'
+                                            }">
+                                            {{ getStatusLabel(req.status) }}
                                         </span>
                                     </div>
                                 </div>
@@ -161,9 +164,14 @@
                                     </div>
                                     <div class="text-end">
                                         <div class="h5 mb-2 fw-bold amount-highlight">${{ req.amount | number:'1.2-2' }}</div>
-                                        <span class="badge border-0 font-monospace"
-                                            [ngClass]="{'bg-warning bg-opacity-25 text-warning': req.status === 'PENDING', 'bg-success bg-opacity-25 text-success': req.status === 'ACCEPTED', 'bg-danger bg-opacity-25 text-danger': req.status === 'DECLINED', 'bg-secondary bg-opacity-25 text-secondary': req.status === 'CANCELLED'}">
-                                            {{ req.status }}
+                                        <span class="request-status"
+                                            [ngClass]="{
+                                                'status-pending': req.status === 'PENDING',
+                                                'status-accepted': req.status === 'ACCEPTED',
+                                                'status-declined': req.status === 'DECLINED',
+                                                'status-cancelled': req.status === 'CANCELLED'
+                                            }">
+                                            {{ getStatusLabel(req.status) }}
                                         </span>
                                     </div>
                                 </div>

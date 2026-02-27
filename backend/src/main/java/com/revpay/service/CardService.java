@@ -2,7 +2,9 @@ package com.revpay.service;
 
 import com.revpay.dto.AddCardRequest;
 import com.revpay.dto.CardResponse;
+import com.revpay.dto.NotificationEvent;
 import com.revpay.model.Card;
+import com.revpay.model.NotificationCategory;
 import com.revpay.model.User;
 import com.revpay.repository.CardRepository;
 import com.revpay.repository.UserRepository;
@@ -14,6 +16,7 @@ import org.springframework.transaction.annotation.Transactional;
 
 import java.util.Comparator;
 import java.util.List;
+import java.util.Map;
 import java.util.stream.Collectors;
 
 @Service
@@ -24,6 +27,7 @@ public class CardService {
     private final CardRepository cardRepository;
     private final UserRepository userRepository;
     private final EncryptionService encryptionService;
+    private final NotificationEventPublisher notificationEventPublisher;
 
     @Transactional
     public CardResponse addCard(String username, AddCardRequest request) {
@@ -56,7 +60,19 @@ public class CardService {
             card.setDefault(true);
         }
 
-        return mapToResponse(cardRepository.save(card));
+        CardResponse response = mapToResponse(cardRepository.save(card));
+        notificationEventPublisher.publish(NotificationEvent.builder()
+                .recipientUserId(user.getId())
+                .category(NotificationCategory.ALERTS)
+                .type("CARD_ADDED")
+                .title("Card added")
+                .message("Card ending " + response.getLastFourDigits() + " was added.")
+                .metadata(Map.of(
+                        "cardId", response.getId(),
+                        "lastFourDigits", response.getLastFourDigits(),
+                        "navigation", "/payment-methods"))
+                .build());
+        return response;
     }
 
     public List<CardResponse> getMyCards(String username) {
@@ -87,7 +103,19 @@ public class CardService {
 
         cardRepository.clearDefaultForUser(card.getUser().getId());
         card.setDefault(true);
-        return mapToResponse(cardRepository.save(card));
+        CardResponse response = mapToResponse(cardRepository.save(card));
+        notificationEventPublisher.publish(NotificationEvent.builder()
+                .recipientUserId(card.getUser().getId())
+                .category(NotificationCategory.ALERTS)
+                .type("CARD_SET_DEFAULT")
+                .title("Default card updated")
+                .message("Card ending " + response.getLastFourDigits() + " is now your default card.")
+                .metadata(Map.of(
+                        "cardId", response.getId(),
+                        "lastFourDigits", response.getLastFourDigits(),
+                        "navigation", "/payment-methods"))
+                .build());
+        return response;
     }
 
 
@@ -106,6 +134,7 @@ public class CardService {
 
         boolean wasDefault = card.isDefault();
         User user = card.getUser();
+        String lastFourDigits = card.getLastFourDigits();
         cardRepository.delete(card);
 
         if (wasDefault) {
@@ -114,6 +143,17 @@ public class CardService {
                 cardRepository.save(nextCard);
             });
         }
+
+        notificationEventPublisher.publish(NotificationEvent.builder()
+                .recipientUserId(user.getId())
+                .category(NotificationCategory.ALERTS)
+                .type("CARD_REMOVED")
+                .title("Card removed")
+                .message("Card ending " + lastFourDigits + " was removed.")
+                .metadata(Map.of(
+                        "lastFourDigits", lastFourDigits,
+                        "navigation", "/payment-methods"))
+                .build());
     }
 
     private Card.CardType detectCardType(String cardNumber) {

@@ -5,6 +5,7 @@ import com.revpay.model.*;
 import com.revpay.repository.InvoiceRepository;
 import com.revpay.repository.UserRepository;
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -17,6 +18,7 @@ import java.util.stream.Collectors;
 
 @Service
 @RequiredArgsConstructor
+@Slf4j
 public class BusinessInvoiceService {
     private final UserRepository userRepository;
     private final InvoiceRepository invoiceRepository;
@@ -153,35 +155,80 @@ public class BusinessInvoiceService {
 
     private void sendInvoiceCreatedNotification(Invoice invoice) {
         Optional<User> customerUser = findCustomerUser(invoice);
-        customerUser.ifPresent(user -> notificationEventPublisher.publish(NotificationEvent.builder()
-                .recipientUserId(user.getId())
+        if (customerUser.isPresent()) {
+            User user = customerUser.get();
+            notificationEventPublisher.publish(NotificationEvent.builder()
+                    .recipientUserId(user.getId())
+                    .category(NotificationCategory.REQUESTS)
+                    .type("INVOICE_CREATED")
+                    .title("New invoice request")
+                    .message("You received invoice " + invoice.getInvoiceNumber() + " for " + invoice.getAmount() + " "
+                            + invoice.getCurrency())
+                    .metadata(Map.of(
+                            "invoiceNumber", invoice.getInvoiceNumber(),
+                            "amount", invoice.getAmount(),
+                            "status", InvoiceStatus.SENT.name(),
+                            "dueDate", invoice.getDueDate().toString(),
+                            "navigation", "/notifications",
+                            "eventTime", LocalDateTime.now().toString()))
+                    .build());
+        } else {
+            log.warn("Invoice created but no customer user matched. invoiceNumber={} email={} phone={} customerId={}",
+                    invoice.getInvoiceNumber(), invoice.getCustomerEmail(), invoice.getCustomerPhone(),
+                    invoice.getCustomerExternalId());
+        }
+
+        notificationEventPublisher.publish(NotificationEvent.builder()
+                .recipientUserId(invoice.getBusinessUser().getId())
                 .category(NotificationCategory.REQUESTS)
-                .type("INVOICE_CREATED")
-                .title("New invoice request")
-                .message("You received invoice " + invoice.getInvoiceNumber() + " for " + invoice.getAmount() + " "
-                        + invoice.getCurrency())
+                .type("INVOICE_SENT")
+                .title("Invoice sent")
+                .message("Invoice " + invoice.getInvoiceNumber() + " was created and sent.")
                 .metadata(Map.of(
                         "invoiceNumber", invoice.getInvoiceNumber(),
                         "amount", invoice.getAmount(),
-                        "dueDate", invoice.getDueDate().toString(),
-                        "navigation", "/payments/invoices/" + invoice.getInvoiceNumber()))
-                .build()));
+                        "status", InvoiceStatus.SENT.name(),
+                        "navigation", "/business",
+                        "eventTime", LocalDateTime.now().toString()))
+                .build());
+
+        notificationEventPublisher.publish(NotificationEvent.builder()
+                .recipientUserId(invoice.getBusinessUser().getId())
+                .category(NotificationCategory.ALERTS)
+                .type("INVOICE_CREATED_ALERT")
+                .title("Invoice created")
+                .message("Invoice " + invoice.getInvoiceNumber() + " was created successfully.")
+                .metadata(Map.of(
+                        "invoiceNumber", invoice.getInvoiceNumber(),
+                        "amount", invoice.getAmount(),
+                        "status", InvoiceStatus.SENT.name(),
+                        "navigation", "/business",
+                        "eventTime", LocalDateTime.now().toString()))
+                .build());
     }
 
     private Optional<User> findCustomerUser(Invoice invoice) {
-        if (invoice.getCustomerEmail() != null) {
-            Optional<User> byEmail = userRepository.findByEmail(invoice.getCustomerEmail());
+        String customerEmail = normalize(invoice.getCustomerEmail());
+        if (customerEmail != null) {
+            Optional<User> byEmail = userRepository.findByEmailIgnoreCase(customerEmail);
             if (byEmail.isPresent()) {
                 return byEmail;
             }
         }
-        if (invoice.getCustomerPhone() != null) {
-            return userRepository.findAll().stream()
-                    .filter(u -> invoice.getCustomerPhone().equals(u.getPhoneNumber()))
-                    .findFirst();
+        String customerExternalId = normalize(invoice.getCustomerExternalId());
+        if (customerExternalId != null) {
+            Optional<User> byExternalId = userRepository.findByUsernameIgnoreCase(customerExternalId)
+                    .or(() -> userRepository.findByEmailIgnoreCase(customerExternalId));
+            if (byExternalId.isPresent()) {
+                return byExternalId;
+            }
         }
-        if (invoice.getCustomerExternalId() != null) {
-            return userRepository.findByUsername(invoice.getCustomerExternalId());
+
+        String customerPhone = digitsOnly(invoice.getCustomerPhone());
+        if (customerPhone != null) {
+            return userRepository.findAll().stream()
+                    .filter(u -> customerPhone.equals(digitsOnly(u.getPhoneNumber())))
+                    .findFirst();
         }
         return Optional.empty();
     }
@@ -272,5 +319,20 @@ public class BusinessInvoiceService {
             return null;
         }
         return value.trim();
+    }
+
+    private String normalize(String value) {
+        if (value == null || value.isBlank()) {
+            return null;
+        }
+        return value.trim();
+    }
+
+    private String digitsOnly(String value) {
+        if (value == null || value.isBlank()) {
+            return null;
+        }
+        String digits = value.replaceAll("\\D", "");
+        return digits.isBlank() ? null : digits;
     }
 }

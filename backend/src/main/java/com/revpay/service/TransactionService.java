@@ -1,6 +1,7 @@
 package com.revpay.service;
 
 import com.revpay.dto.SendMoneyRequest;
+import com.revpay.dto.NotificationEvent;
 import com.revpay.dto.TransactionResponse;
 import com.revpay.model.*;
 import com.revpay.repository.TransactionRepository;
@@ -14,6 +15,7 @@ import org.springframework.stereotype.Service;
 
 import java.time.LocalDateTime;
 import java.util.List;
+import java.util.Map;
 import java.util.stream.Collectors;
 
 @Service
@@ -24,6 +26,7 @@ public class TransactionService {
     private final TransactionRepository transactionRepository;
     private final WalletRepository walletRepository;
     private final UserRepository userRepository;
+    private final NotificationEventPublisher notificationEventPublisher;
 
     @Transactional
         public TransactionResponse sendMoney(String senderUsername, SendMoneyRequest request) {
@@ -72,7 +75,38 @@ public class TransactionService {
 
                 Transaction savedTransaction = transactionRepository.save(transaction);
 
-                // Notify both parties
+                String receiverCounterparty = receiver.getEmail() != null ? receiver.getEmail() : receiver.getUsername();
+                String senderCounterparty = sender.getEmail() != null ? sender.getEmail() : sender.getUsername();
+
+                notificationEventPublisher.publish(NotificationEvent.builder()
+                                .recipientUserId(sender.getId())
+                                .category(NotificationCategory.TRANSACTIONS)
+                                .type("MONEY_SENT")
+                                .title("Money sent")
+                                .message("You sent $" + request.getAmount() + " to " + receiverCounterparty + ".")
+                                .metadata(Map.of(
+                                                "transactionId", savedTransaction.getId(),
+                                                "amount", request.getAmount(),
+                                                "counterparty", receiverCounterparty,
+                                                "status", savedTransaction.getStatus().name(),
+                                                "navigation", "/transactions/" + savedTransaction.getId(),
+                                                "eventTime", savedTransaction.getTimestamp().toString()))
+                                .build());
+
+                notificationEventPublisher.publish(NotificationEvent.builder()
+                                .recipientUserId(receiver.getId())
+                                .category(NotificationCategory.TRANSACTIONS)
+                                .type("MONEY_RECEIVED")
+                                .title("Money received")
+                                .message("You received $" + request.getAmount() + " from " + senderCounterparty + ".")
+                                .metadata(Map.of(
+                                                "transactionId", savedTransaction.getId(),
+                                                "amount", request.getAmount(),
+                                                "counterparty", senderCounterparty,
+                                                "status", savedTransaction.getStatus().name(),
+                                                "navigation", "/transactions/" + savedTransaction.getId(),
+                                                "eventTime", savedTransaction.getTimestamp().toString()))
+                                .build());
         
                 return mapToResponse(savedTransaction, senderWallet);
         }

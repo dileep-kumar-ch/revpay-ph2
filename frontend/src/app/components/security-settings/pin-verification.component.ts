@@ -5,15 +5,15 @@ import { AuthService } from '../../services/auth.service';
 @Component({
     selector: 'app-pin-verification',
     template: `
-    <div class="modal fade show d-block" tabindex="-1" style="background: rgba(0,0,0,0.5);">
+    <div class="modal fade show d-block pin-modal-backdrop" tabindex="-1">
       <div class="modal-dialog modal-dialog-centered">
-        <div class="modal-content glass-morphism border-0 shadow-lg">
+        <div class="modal-content pin-modal-content border-0 shadow-lg">
           <div class="modal-header border-0 pb-0">
-            <h5 class="modal-title text-white">Security Verification</h5>
-            <button type="button" class="btn-close btn-close-white" (click)="cancel.emit()"></button>
+            <h5 class="modal-title">Security Verification</h5>
+            <button type="button" class="btn-close" (click)="cancel.emit()"></button>
           </div>
           <div class="modal-body py-4">
-            <p class="text-white-50 mb-4">Please enter your 4-digit transaction PIN to authorize this transfer.</p>
+            <p class="pin-modal-subtitle mb-4">Please enter your 4-digit transaction PIN to authorize this transfer.</p>
             
             <div class="d-flex justify-content-center gap-2 mb-4">
                 <input *ngFor="let i of [0,1,2,3]" 
@@ -32,14 +32,14 @@ import { AuthService } from '../../services/auth.service';
             <div *ngIf="errorMessage" class="alert alert-danger py-2 small mb-0">{{ errorMessage }}</div>
             
             <div class="text-center mt-3">
-              <a (click)="onForgotPin()" class="text-info small" style="cursor: pointer; text-decoration: none;">
+              <a (click)="onForgotPin()" class="small pin-forgot-link" style="cursor: pointer; text-decoration: none;">
                 Forgot transaction PIN?
               </a>
             </div>
           </div>
           <div class="modal-footer border-0 pt-0">
-            <button type="button" class="btn btn-outline-light" (click)="cancel.emit()">Cancel</button>
-            <button type="button" class="btn btn-primary px-4" 
+            <button type="button" class="btn pin-btn-cancel" (click)="cancel.emit()">Cancel</button>
+            <button type="button" class="btn pin-btn-authorize px-4" 
                     [disabled]="!isPinComplete() || loading" 
                     (click)="verify()">
               {{ loading ? 'Verifying...' : 'Authorize' }}
@@ -50,30 +50,66 @@ import { AuthService } from '../../services/auth.service';
     </div>
   `,
     styles: [`
-    .glass-morphism {
-      background: rgba(30, 60, 114, 0.95);
-      backdrop-filter: blur(15px);
+    .pin-modal-backdrop {
+      background: rgba(15, 23, 42, 0.45);
+    }
+    .pin-modal-content {
+      background: #fffaf5;
+      border: 1px solid #fdba74;
+      border-radius: 12px;
+    }
+    .modal-title {
+      color: #9a3412;
+      font-weight: 700;
+    }
+    .pin-modal-subtitle {
+      color: #7c2d12;
     }
     .pin-input {
       width: 50px;
       height: 60px;
       text-align: center;
       font-size: 1.5rem;
-      background: rgba(255, 255, 255, 0.1);
-      border: 1px solid rgba(255, 255, 255, 0.2);
-      color: white;
+      background: #fff7ed;
+      border: 1px solid #fdba74;
+      color: #7c2d12;
     }
     .pin-input:focus {
-      background: rgba(255, 255, 255, 0.2);
-      border-color: #00d2ff;
-      box-shadow: 0 0 10px rgba(0, 210, 255, 0.5);
-      color: white;
+      background: #ffffff;
+      border-color: #ea580c;
+      box-shadow: 0 0 0 0.2rem rgba(234, 88, 12, 0.2);
+      color: #7c2d12;
     }
-    .btn-primary {
-      background: #00d2ff;
-      border: none;
-      color: #000;
+    .pin-forgot-link {
+      color: #c2410c;
+    }
+    .pin-forgot-link:hover {
+      color: #ea580c;
+      text-decoration: underline;
+    }
+    .pin-btn-cancel {
+      border: 1px solid #fdba74;
+      color: #9a3412;
+      background: #ffffff;
       font-weight: 600;
+    }
+    .pin-btn-cancel:hover {
+      background: #fff7ed;
+      color: #7c2d12;
+    }
+    .pin-btn-authorize {
+      background: #ea580c;
+      border: 1px solid #ea580c;
+      color: #ffffff;
+      font-weight: 700;
+    }
+    .pin-btn-authorize:hover:not(:disabled) {
+      background: #c2410c;
+      border-color: #c2410c;
+      color: #ffffff;
+    }
+    .pin-btn-authorize:disabled {
+      opacity: 0.6;
     }
   `]
 })

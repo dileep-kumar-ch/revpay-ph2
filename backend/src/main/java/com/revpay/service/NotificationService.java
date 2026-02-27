@@ -77,7 +77,8 @@ public class NotificationService {
             log.error("Failed to persist notification event type={} recipient={} reason={}",
                     event != null ? event.getType() : null,
                     event != null ? event.getRecipientUserId() : null,
-                    ex.getMessage());
+                    ex.getMessage(),
+                    ex);
         }
     }
 
@@ -186,7 +187,9 @@ public class NotificationService {
             notificationRepository.save(alert);
         } catch (Exception ex) {
             log.error("Failed to create low-balance alert user={} reason={}",
-                    user != null ? user.getId() : null, ex.getMessage());
+                    user != null ? user.getId() : null,
+                    ex.getMessage(),
+                    ex);
         }
     }
 

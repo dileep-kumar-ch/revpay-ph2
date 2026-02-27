@@ -14,7 +14,7 @@
   <div class="category-tabs">
     <button class="tab-btn" [class.active]="selectedCategory === 'ALL'" (click)="setCategory('ALL')">All</button>
     <button class="tab-btn" [class.active]="selectedCategory === 'TRANSACTIONS'" (click)="setCategory('TRANSACTIONS')">Transactions</button>
-    <button class="tab-btn" [class.active]="selectedCategory === 'REQUESTS'" (click)="setCategory('REQUESTS')">Requests</button>
+    <!-- <button class="tab-btn" [class.active]="selectedCategory === 'REQUESTS'" (click)="setCategory('REQUESTS')">Requests</button> -->
     <button class="tab-btn" [class.active]="selectedCategory === 'ALERTS'" (click)="setCategory('ALERTS')">Alerts</button>
   </div>
 
@@ -62,7 +62,7 @@
       </article>
     </section>
 
-    <aside class="preferences-panel">
+    <!-- <aside class="preferences-panel">
       <h3>Notification Preferences</h3>
       <label class="pref-row">
         <input type="checkbox" [(ngModel)]="preferences.transactionsEnabled">
@@ -85,7 +85,7 @@
       </button>
     </aside>
   </div>
-</div>
+</div> -->
 
 <app-pin-verification
   *ngIf="showPinModal"
