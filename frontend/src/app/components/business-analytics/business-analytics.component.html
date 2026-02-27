@@ -1,0 +1,31 @@
+<app-feature-nav></app-feature-nav>
+
+<div class="analytics-container">
+    <div class="head">
+        <div>
+            <h2>Business Analytics Dashboard</h2>
+            <p>Revenue and invoice performance overview.</p>
+        </div>
+        <a routerLink="/business" class="back-link">Back to Business Hub</a>
+    </div>
+
+    <div *ngIf="error" class="alert">{{ error }}</div>
+
+    <div *ngIf="analytics" class="stats-grid">
+        <div class="tile">
+            <h4>Total Revenue</h4>
+            <p>{{ analytics.totalRevenue | currency }}</p>
+        </div>
+        <div class="tile">
+            <h4>Transactions</h4>
+            <p>{{ analytics.transactionSummary.totalTransactions }}</p>
+            <small>Received {{ analytics.transactionSummary.totalReceived | currency }} / Sent {{
+                analytics.transactionSummary.totalSent | currency }}</small>
+        </div>
+        <div class="tile">
+            <h4>Outstanding Invoices</h4>
+            <p>{{ analytics.outstandingInvoices.count }}</p>
+            <small>{{ analytics.outstandingInvoices.totalAmount | currency }}</small>
+        </div>
+    </div>
+</div>

@@ -1,0 +1,134 @@
+.analytics-container {
+    max-width: 1100px;
+    margin: 0 auto;
+    padding: 1.5rem;
+    color: #431407;
+}
+
+.head {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    gap: 1rem;
+}
+
+.head h2 {
+    margin: 0;
+    color: #9a3412;
+}
+
+.head p {
+    margin: 0.35rem 0 0;
+    color: #7c2d12;
+}
+
+.back-link {
+    color: #c2410c;
+    text-decoration: none;
+    border: 1px solid #fdba74;
+    background: #fff7ed;
+    border-radius: 8px;
+    padding: 0.5rem 0.75rem;
+    font-weight: 600;
+}
+
+.back-link:hover {
+    color: #ea580c;
+    border-color: #ea580c;
+}
+
+.filters {
+    margin-top: 1rem;
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.7rem;
+    align-items: flex-end;
+}
+
+.filters label {
+    display: grid;
+    gap: 0.35rem;
+}
+
+input,
+button {
+    border-radius: 8px;
+    border: 1px solid #fdba74;
+    background: #fff7ed;
+    color: #431407;
+    padding: 0.5rem 0.7rem;
+}
+
+button {
+    cursor: pointer;
+    font-weight: 600;
+}
+
+.stats-grid {
+    margin-top: 1rem;
+    display: grid;
+    gap: 0.8rem;
+    grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+}
+
+.tile {
+    background: #ffffff;
+    border: 1px solid #fed7aa;
+    border-radius: 10px;
+    padding: 0.95rem;
+    box-shadow: 0 8px 24px rgba(234, 88, 12, 0.08);
+}
+
+.tile h4 {
+    margin: 0;
+    color: #7c2d12;
+}
+
+.tile p {
+    margin: 0.4rem 0 0.2rem;
+    font-size: 1.25rem;
+    font-weight: 700;
+    color: #ea580c;
+}
+
+.tile small {
+    color: #7c2d12;
+}
+
+.chart-panels {
+    margin-top: 1rem;
+    display: grid;
+    gap: 0.8rem;
+    grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+}
+
+.panel {
+    background: #ffffff;
+    border: 1px solid #fed7aa;
+    border-radius: 10px;
+    padding: 0.85rem;
+}
+
+.panel h3 {
+    margin-top: 0;
+}
+
+.list-item {
+    display: flex;
+    justify-content: space-between;
+    padding: 0.45rem 0;
+    border-bottom: 1px solid #ffedd5;
+}
+
+.list-item:last-child {
+    border-bottom: none;
+}
+
+.alert {
+    margin-top: 0.9rem;
+    border: 1px solid #fecaca;
+    background: #fef2f2;
+    color: #991b1b;
+    border-radius: 8px;
+    padding: 0.65rem 0.75rem;
+}

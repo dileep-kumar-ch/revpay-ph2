@@ -1,0 +1,17 @@
+<nav class="feature-nav">
+    <div class="feature-nav-inner">
+        <a routerLink="/dashboard" routerLinkActive="active">Dashboard</a>
+        <a routerLink="/wallet" routerLinkActive="active">Wallet</a>
+        <a routerLink="/transactions" routerLinkActive="active">Activity</a>
+        <a routerLink="/requests" routerLinkActive="active">Requests</a>
+        <a routerLink="/payment-methods" routerLinkActive="active">Cards</a>
+        <a *ngIf="isBusinessAccount()" routerLink="/business" routerLinkActive="active">Business</a>
+        <a *ngIf="isBusinessAccount()" routerLink="/analytics" routerLinkActive="active">Analytics</a>
+        <a routerLink="/security" routerLinkActive="active">Security</a>
+        <a class="notification-link" routerLink="/notifications" routerLinkActive="active">
+            Notifications
+            <span *ngIf="unreadNotifications > 0" class="badge">{{ unreadNotifications }}</span>
+        </a>
+        <button type="button" class="logout-btn" (click)="logout()">Logout</button>
+    </div>
+</nav>

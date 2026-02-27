@@ -1,0 +1,94 @@
+* {
+    box-sizing: border-box;
+    scrollbar-width: none;
+    -ms-overflow-style: none;
+}
+
+*::-webkit-scrollbar {
+    width: 0;
+    height: 0;
+    display: none;
+}
+
+body {
+    margin: 0;
+    font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Roboto', 'Oxygen',
+        'Ubuntu', 'Cantarell', 'Fira Sans', 'Droid Sans', 'Helvetica Neue',
+        sans-serif;
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
+    background: #fff7ed;
+    color: #3b2a1f;
+    min-height: 100vh;
+    overflow-y: auto;
+    overflow-x: hidden;
+}
+
+code {
+    font-family: source-code-pro, Menlo, Monaco, Consolas, 'Courier New',
+        monospace;
+}
+
+/* Global Dark Theme Form Helpers */
+.form-control,
+.form-select,
+.input-group-text {
+    background-color: #fff7ed !important;
+    border: 1px solid #fdba74 !important;
+    color: #7c2d12 !important;
+}
+
+.form-control::placeholder {
+    color: #c2410c !important;
+}
+
+.form-control:focus,
+.form-select:focus {
+    background-color: #ffffff !important;
+    border-color: #ea580c !important;
+    box-shadow: 0 0 0 0.25rem rgba(234, 88, 12, 0.2) !important;
+    color: #7c2d12 !important;
+}
+
+.text-dark {
+    color: #1e293b !important;
+}
+
+.navbar {
+    background: #c2410c !important;
+    backdrop-filter: blur(10px);
+}
+
+a {
+    color: #c2410c;
+}
+
+a:hover {
+    color: #ea580c;
+}
+
+.btn-primary,
+button.btn-primary,
+.btn.btn-primary {
+    background: #ea580c !important;
+    border-color: #ea580c !important;
+    color: #fff !important;
+}
+
+.btn-primary:hover,
+button.btn-primary:hover,
+.btn.btn-primary:hover {
+    background: #c2410c !important;
+    border-color: #c2410c !important;
+}
+
+.card,
+.glass-morphism {
+    background: #ffffff !important;
+    border-color: #fed7aa !important;
+    color: #3b2a1f !important;
+}
+
+.feature-nav {
+    background: #9a3412 !important;
+}

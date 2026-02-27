@@ -1,0 +1,173 @@
+.wallet-container {
+    padding: 2rem;
+    max-width: 800px;
+    margin: 0 auto;
+    color: #431407;
+}
+
+.glass-morphism {
+    background: #ffffff;
+    backdrop-filter: blur(10px);
+    border: 1px solid #fed7aa;
+    border-radius: 12px;
+}
+
+.wallet-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 2rem;
+    margin-bottom: 2rem;
+    color: #7c2d12;
+    background: linear-gradient(135deg, #ffedd5 0%, #fed7aa 100%);
+}
+
+.balance-display .label {
+    font-size: 0.9rem;
+    opacity: 0.8;
+}
+
+.balance-display .amount {
+    font-size: 2.5rem;
+    font-weight: bold;
+}
+
+.wallet-operations {
+    padding: 0;
+    overflow: hidden;
+}
+
+.tabs {
+    display: flex;
+    background: #fff7ed;
+}
+
+.tabs button {
+    flex: 1;
+    padding: 1rem;
+    border: none;
+    background: none;
+    color: #7c2d12;
+    cursor: pointer;
+    font-weight: 600;
+    transition: background 0.3s;
+    opacity: 0.6;
+}
+
+.tabs button.active {
+    background: #ea580c;
+    color: #fff;
+    opacity: 1;
+}
+
+.tab-content {
+    padding: 2rem;
+    color: #431407;
+}
+
+.op-section h3 {
+    margin-bottom: 1.5rem;
+    color: #c2410c;
+}
+
+.form-group {
+    margin-bottom: 1.5rem;
+}
+
+.form-group label {
+    display: block;
+    margin-bottom: 0.5rem;
+    font-size: 0.9rem;
+    opacity: 1;
+    color: #7c2d12;
+}
+
+input.form-control:focus,
+select.form-select:focus,
+textarea.form-control:focus {
+    background: #ffffff !important;
+    border-color: #ea580c;
+    box-shadow: 0 0 10px rgba(234, 88, 12, 0.2);
+    color: #431407 !important;
+}
+
+.input-group-text {
+    border: 1px solid rgba(255, 255, 255, 0.2);
+}
+
+.btn-primary {
+    width: 100%;
+    padding: 1rem;
+    background: #ea580c;
+    color: #fff;
+    border: none;
+    border-radius: 8px;
+    font-weight: bold;
+    cursor: pointer;
+    transition: all 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+}
+
+.btn-primary:hover:not(:disabled) {
+    background: #c2410c;
+    transform: translateY(-2px);
+    box-shadow: 0 5px 15px rgba(234, 88, 12, 0.3);
+}
+
+.btn-primary:disabled {
+    opacity: 0.5;
+    cursor: not-allowed;
+}
+
+.status-messages {
+    margin-top: 1rem;
+}
+
+.success-message {
+    color: #00c853;
+    background: rgba(0, 200, 83, 0.1);
+    padding: 1rem;
+    border-radius: 8px;
+}
+
+.error-message {
+    color: #ff4d4d;
+    background: rgba(255, 77, 77, 0.1);
+    padding: 1rem;
+    border-radius: 8px;
+}
+
+.info-text {
+    font-size: 0.85rem;
+    opacity: 0.6;
+    margin-bottom: 1rem;
+}
+
+.actions {
+    display: flex;
+    gap: 1rem;
+    margin-top: 2rem;
+}
+
+.btn-secondary {
+    flex: 1;
+    padding: 0.8rem;
+    background: rgba(255, 255, 255, 0.1);
+    color: #7c2d12;
+    border: 1px solid #fdba74;
+    border-radius: 8px;
+    cursor: pointer;
+}
+
+select.form-select {
+    border-color: rgba(255, 255, 255, 0.2);
+}
+
+select.form-select option {
+    background: #fff7ed;
+    color: #431407;
+}
+.amount{
+    font-size: 1.5rem;
+    font-weight: bold;
+    color: green;
+}

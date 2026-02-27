@@ -1,0 +1,150 @@
+<app-feature-nav></app-feature-nav>
+
+<div class="wallet-container">
+    <div class="wallet-header glass-morphism d-flex justify-content-between align-items-center">
+        <div class="balance-info">
+            <h2>Current Balance</h2>
+            <p class="amount" *ngIf="wallet">{{ wallet.balance | currency:'USD':'symbol':'1.2-2' }}</p>
+            <p class="amount" *ngIf="!wallet">$0.00</p>
+        </div>
+    </div>
+
+    <div class="wallet-operations glass-morphism shadow">
+        <div class="tabs d-flex">
+            <button class="flex-grow-1" [class.active]="activeTab === 'send'" (click)="activeTab = 'send'">
+                <i class="bi bi-send me-2"></i>Send Money
+            </button>
+            <button class="flex-grow-1" [class.active]="activeTab === 'add'" (click)="activeTab = 'add'">
+                <i class="bi bi-plus-circle me-2"></i>Add Funds
+            </button>
+            <button class="flex-grow-1" [class.active]="activeTab === 'withdraw'" (click)="activeTab = 'withdraw'">
+                <i class="bi bi-bank me-2"></i>Withdraw
+            </button>
+            <button class="flex-grow-1" [class.active]="activeTab === 'bills'" (click)="activeTab = 'bills'">
+                <i class="bi bi-receipt me-2"></i>Bills
+                
+            </button>
+        </div>
+
+        <div class="tab-content">
+            <!-- Send Money Tab -->
+            <div *ngIf="activeTab === 'send'" class="op-section">
+                <h3 class="h4 mb-4">Send Money Instantly</h3>
+                <form [formGroup]="sendMoneyForm" (ngSubmit)="onSendMoney()">
+                    <div class="mb-3">
+                        <label class="form-label">Recipient Username/Email</label>
+                        <div class="input-group">
+                            <span class="input-group-text bg-transparent border-end-0 text-white"><i
+                                    class="bi bi-person"></i></span>
+                            <input type="text" class="form-control bg-transparent text-white border-start-0"
+                                formControlName="receiverUsername" placeholder="Enter username or email" />
+                        </div>
+                    </div>
+                    <div class="mb-3">
+                        <label class="form-label">Amount</label>
+                        <div class="input-group">
+                            <span class="input-group-text bg-transparent border-end-0 text-white">$</span>
+                            <input type="number" class="form-control bg-transparent text-white border-start-0"
+                                formControlName="amount" placeholder="0.00" step="0.01" />
+                        </div>
+                    </div>
+                    <div class="mb-3">
+                        <label class="form-label">Note (Optional)</label>
+                        <textarea class="form-control bg-transparent text-white" formControlName="note"
+                            placeholder="Add a note..." rows="2"></textarea>
+                    </div>
+                    <button type="submit" class="btn btn-primary btn-lg w-100 mt-2"
+                        [disabled]="sendMoneyForm.invalid || loading">
+                        {{ loading ? 'Processing...' : 'Send Money' }}
+                    </button>
+                </form>
+            </div>
+
+            <!-- Add Funds Tab -->
+            <div *ngIf="activeTab === 'add'" class="op-section">
+                <h3 class="h4 mb-4">Fund Your Wallet</h3>
+                <form [formGroup]="fundForm" (ngSubmit)="onAddFunds()">
+                    <div class="mb-3">
+                        <label class="form-label">Payment Method</label>
+                        <select class="form-select bg-transparent text-white" formControlName="paymentMethodType">
+                            <option *ngFor="let option of paymentMethodOptions" [ngValue]="option">
+                                {{ option === 'DEFAULT' ? 'Default Card' : (option + ' Card') }}
+                            </option>
+                        </select>
+                    </div>
+
+                    <div class="mb-3" *ngIf="fundForm.get('paymentMethodType')?.value !== 'DEFAULT'">
+                        <label class="form-label">Select Card</label>
+                        <select class="form-select bg-transparent text-white" formControlName="cardId">
+                            <option [ngValue]="''" disabled>Select a card</option>
+                            <option *ngFor="let card of filteredFundCards" [ngValue]="card.id">
+                                {{ card.isDefault ? 'Default - ' : '' }}{{ card.paymentMethodType }} {{ card.cardType }} •••• {{ card.lastFourDigits }}
+                            </option>
+                        </select>
+                        <p class="text-warning small mt-2 mb-0" *ngIf="filteredFundCards.length === 0">
+                            No matching cards found. Please add a card in Payment Methods.
+                        </p>
+                    </div>
+
+                    <div class="mb-3">
+                        <label class="form-label">Amount to Add</label>
+                        <div class="input-group">
+                            <span class="input-group-text bg-transparent border-end-0 text-white">$</span>
+                            <input type="number" class="form-control bg-transparent text-white border-start-0"
+                                formControlName="amount" placeholder="0.00" />
+                        </div>
+                    </div>
+                    <button type="submit" class="btn btn-primary btn-lg w-100 mt-2"
+                        [disabled]="fundForm.invalid || loading || filteredFundCards.length === 0">
+                        {{ loading ? 'Processing...' : 'Add Funds' }}
+                    </button>
+                </form>
+            </div>
+
+            <!-- Withdraw Tab -->
+            <div *ngIf="activeTab === 'withdraw'" class="op-section">
+                <h3 class="h4 mb-4">Withdraw to Card</h3>
+                <form [formGroup]="withdrawForm" (ngSubmit)="onWithdrawFunds()">
+                    <div class="mb-3">
+                        <label class="form-label">Amount to Withdraw</label>
+                        <div class="input-group">
+                            <span class="input-group-text bg-transparent border-end-0 text-white">$</span>
+                            <input type="number" class="form-control bg-transparent text-white border-start-0"
+                                formControlName="amount" placeholder="0.00" />
+                        </div>
+                    </div>
+                    <p class="text-white-50 small mb-4">
+                        <i class="bi bi-info-circle me-1"></i> Funds will be sent to your primary payment method.
+                    </p>
+                    <button type="submit" class="btn btn-primary btn-lg w-100 mt-2"
+                        [disabled]="withdrawForm.invalid || loading">
+                        {{ loading ? 'Processing...' : 'Withdraw Funds' }}
+                    </button>
+                </form>
+            </div>
+
+            <!-- Bills Tab -->
+            <div *ngIf="activeTab === 'bills'" class="op-section">
+                <h3 class="h4 mb-4">Bills</h3>
+                <p class="text-white-50 mb-0">Bill payment feature will be available soon.</p>
+            </div>
+        </div>
+
+        <div class="mt-4">
+            <div class="alert alert-success alert-dismissible fade show border-0 bg-success bg-opacity-10 text-success"
+                *ngIf="successMessage">
+                <i class="bi bi-check-circle-fill me-2"></i>{{ successMessage }}
+                <button type="button" class="btn-close" (click)="successMessage = ''"></button>
+            </div>
+            <div class="alert alert-danger alert-dismissible fade show border-0 bg-danger bg-opacity-10 text-danger"
+                *ngIf="errorMessage">
+                <i class="bi bi-exclamation-circle-fill me-2"></i>{{ errorMessage }}
+                <button type="button" class="btn-close" (click)="errorMessage = ''"></button>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- PIN Verification Modal -->
+<app-pin-verification *ngIf="showPinModal" (verified)="onPinVerified()" (cancel)="onPinCancel()">
+</app-pin-verification>

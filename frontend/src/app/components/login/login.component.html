@@ -1,0 +1,83 @@
+<div class="login-container">
+  <div class="intro-panel">
+    <div class="branding-section">
+      <div class="logo-large">
+        <span class="logo-rp">RP</span>
+        <span class="logo-name">RevPay</span>
+      </div >
+      <span>
+        <marquee behavior="top" direction="down" scrollamount="2" style="height: 30px; margin-top: 10px;">
+  <p class="tagline" style="color: #c2410c;">
+    Payments, requests, security, and control in one wallet.
+  </p>
+</marquee>
+      </span>
+    </div>
+
+    <div class="intro-content">
+      <p>
+        RevPay is a digital payments platform to send and receive money instantly, manage requests, track activity,
+        and handle account security from one place.
+      </p>
+
+      <div class="feature-list">
+        <div class="feature-item">
+          <span class="feature-title">Instant transfers:</span>
+          <span class="feature-text">Send and receive money in real time.</span>
+        </div>
+        <div class="feature-item">
+          <span class="feature-title">Money requests:</span>
+          <span class="feature-text">Create, accept, or decline requests quickly.</span>
+        </div>
+        <div class="feature-item">
+          <span class="feature-title">Clear history:</span>
+          <span class="feature-text">Track every transaction with context.</span>
+        </div>
+        <div class="feature-item">
+          <span class="feature-title">Secure access:</span>
+          <span class="feature-text">PIN and account security controls built-in.</span>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="login-card">
+    <h2>Welcome!</h2>
+    <p class="subtitle">Sign in to your account</p>
+
+    <form [formGroup]="loginForm" (ngSubmit)="onSubmit()">
+      <div class="form-group">
+        <label for="email">Email</label>
+        <input type="email" id="email" formControlName="email" class="form-control" placeholder="Enter your email" />
+        <div class="error" *ngIf="loginForm.get('email')?.invalid && loginForm.get('email')?.touched">
+          Please enter a valid email
+        </div>
+      </div>
+
+      <div class="form-group">
+        <label for="password">Password</label>
+        <input type="password" id="password" formControlName="password" class="form-control"
+          placeholder="Enter your password" />
+        <div class="error" *ngIf="loginForm.get('password')?.invalid && loginForm.get('password')?.touched">
+          Password must be at least 6 characters
+        </div>
+      </div>
+
+      <div class="error-message" *ngIf="errorMessage">
+        {{ errorMessage }}
+      </div>
+
+      <button type="submit" class="btn-primary" [disabled]="loginForm.invalid || loading">
+        {{ loading ? 'Signing in...' : 'Sign In' }}
+      </button>
+
+      <div class="forgot-password">
+        <a routerLink="/recovery">Forgot Password?</a>
+      </div>
+    </form>
+
+    <div class="register-link">
+      Don't have an account? <a routerLink="/register">Register here</a>
+    </div>
+  </div>
+</div>

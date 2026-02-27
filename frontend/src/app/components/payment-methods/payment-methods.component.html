@@ -1,0 +1,138 @@
+<app-feature-nav></app-feature-nav>
+
+<div class="payment-methods-container">
+    <div class="header-section">
+        <h2>Payment Methods</h2>
+        <div class="header-actions">
+            <button class="btn-primary" (click)="showAddCard = !showAddCard">
+                {{ showAddCard ? 'Cancel' : '+ Add New Card' }}
+            </button>
+        </div>
+    </div>
+
+    <div *ngIf="error" class="alert alert-danger">{{ error }}</div>
+    <div *ngIf="success" class="alert alert-success">{{ success }}</div>
+
+    <!-- Add Card Form - Modal Style -->
+    <div *ngIf="showAddCard" class="modal-overlay" (click)="showAddCard = false">
+        <div class="card-modal glass-morphism" (click)="$event.stopPropagation()">
+            <div class="modal-header">
+                <h3>Add Secure Card</h3>
+                <button class="btn-close" (click)="showAddCard = false">&times;</button>
+            </div>
+
+            <div class="virtual-card-preview" [class.visa]="cardForm.get('cardNumber')?.value?.startsWith('4')"
+                [class.mastercard]="cardForm.get('cardNumber')?.value?.startsWith('5')">
+                <div class="card-chip"></div>
+                <div class="card-number-display">{{ formatCardNumber(cardForm.get('cardNumber')?.value) || '**** **** **** ****' }}</div>
+                <div class="card-details-row">
+                    <div class="card-holder-display">{{ cardForm.get('cardHolderName')?.value || 'YOUR NAME' }}</div>
+                    <div class="card-expiry-display">{{ cardForm.get('expiryDate')?.value || 'MM/YY' }}</div>
+                </div>
+            </div>
+
+            <form [formGroup]="cardForm" (ngSubmit)="onSubmit()" class="modern-form">
+                <div class="form-group floating-label">
+                    <input type="text" id="cardHolderName" formControlName="cardHolderName" placeholder=" "
+                        autocomplete="cc-name" (input)="onCardHolderNameInput($event)">
+                    <label for="cardHolderName">Cardholder Name</label>
+                    <small class="field-error"
+                        *ngIf="cardForm.get('cardHolderName')?.touched && cardForm.get('cardHolderName')?.errors?.['pattern']">
+                        Cardholder name must contain letters only.
+                    </small>
+                </div>
+
+                <div class="form-group select-group">
+                    <label for="paymentMethodType">Card Type</label>
+                    <select id="paymentMethodType" formControlName="paymentMethodType">
+                        <option value="DEBIT">Debit Card</option>
+                        <option value="CREDIT">Credit Card</option>
+                    </select>
+                </div>
+
+                <div class="form-group floating-label">
+                    <input type="text" id="cardNumber" formControlName="cardNumber" maxlength="16" placeholder=" "
+                        autocomplete="cc-number" inputmode="numeric" (input)="onCardNumberInput($event)">
+                    <label for="cardNumber">Card Number</label>
+                </div>
+
+                <div class="form-row">
+                    <div class="form-group floating-label">
+                        <input type="text" id="expiryDate" formControlName="expiryDate" maxlength="5" placeholder=" "
+                            autocomplete="cc-exp" inputmode="numeric" (input)="onExpiryInput($event)">
+                        <label for="expiryDate">Expiry Date (MM/YY)</label>
+                        <small class="field-error"
+                            *ngIf="cardForm.get('expiryDate')?.touched && cardForm.get('expiryDate')?.errors?.['pattern']">
+                            Enter expiry in MM/YY format.
+                        </small>
+                        <small class="field-error"
+                            *ngIf="cardForm.get('expiryDate')?.touched && cardForm.get('expiryDate')?.errors?.['expired']">
+                            Expiry cannot be in the past.
+                        </small>
+                    </div>
+                    <div class="form-group floating-label">
+                        <input type="password" id="cvv" formControlName="cvv" maxlength="3" placeholder=" "
+                            autocomplete="cc-csc" inputmode="numeric" (input)="onCvvInput($event)">
+                        <label for="cvv">CVV</label>
+                        <small class="field-error"
+                            *ngIf="cardForm.get('cvv')?.touched && cardForm.get('cvv')?.errors?.['pattern']">
+                            CVV must be exactly 3 digits.
+                        </small>
+                    </div>
+                </div>
+
+                <div class="toggle-wrapper">
+                    <label class="toggle-control" for="setAsDefault">
+                        <input type="checkbox" id="setAsDefault" formControlName="setAsDefault">
+                        <span class="toggle-slider"></span>
+                    </label>
+                    <label class="toggle-label" for="setAsDefault">Set as default payment method</label>
+                </div>
+                <p *ngIf="existingDefaultCard" class="default-card-hint">
+                    Current default card: {{ existingDefaultCard.cardType }} **** {{ existingDefaultCard.lastFourDigits }}
+                </p>
+
+                <button type="submit" class="btn-primary-glow" [disabled]="cardForm.invalid || loading">
+                    <span *ngIf="!loading">Add Secure Card</span>
+                    <span *ngIf="loading" class="spinner"></span>
+                </button>
+            </form>
+        </div>
+    </div>
+
+    <!-- Cards List -->
+    <div class="cards-grid">
+        <div *ngFor="let card of cards" class="payment-card" [class.default]="card.isDefault">
+            <span *ngIf="card.isDefault" class="default-ribbon">
+                <span class="default-symbol">&#10003;</span>
+                Default Card
+            </span>
+            <div class="card-chip"></div>
+            <div class="card-vendor">{{ card.cardType }}</div>
+            <div class="card-number">**** **** **** {{ card.lastFourDigits }}</div>
+            <div class="card-holder">Cardholder: {{ card.cardHolderName }}</div>
+            <div class="card-method-type">Type: {{ card.paymentMethodType }}</div>
+            <div class="card-footer">
+                <div class="card-info">
+                    <span class="label">Expiry</span>
+                    <span class="value">{{ card.expiryDate }}</span>
+                </div>
+                <div class="card-actions">
+                    <span *ngIf="card.isDefault" class="status-pill default-status">
+                        <span class="default-symbol">&#9733;</span>
+                        Default
+                    </span>
+                    <button *ngIf="!card.isDefault" class="btn-set-default" (click)="setDefaultCard(card)"
+                        [disabled]="settingDefaultCardId === card.id">
+                        {{ settingDefaultCardId === card.id ? 'Updating...' : 'Set as Default' }}
+                    </button>
+                    <button class="btn-delete" (click)="deleteCard(card.id)">Remove</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div *ngIf="cards.length === 0 && !loading" class="empty-state">
+        <p>No payment methods found. Add a card to start funding your wallet.</p>
+    </div>
+</div>

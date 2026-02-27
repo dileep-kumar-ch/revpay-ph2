@@ -1,0 +1,518 @@
+.payment-methods-container {
+    padding: 2.5rem;
+    max-width: 1200px;
+    margin: 0 auto;
+    color: #431407;
+}
+
+.header-section {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 3rem;
+}
+
+.header-section h2 {
+    font-size: 2rem;
+    font-weight: 700;
+    margin: 0;
+    color: #9a3412;
+}
+
+/* Modal Styling */
+.modal-overlay {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: rgba(0, 0, 0, 0.7);
+    backdrop-filter: blur(8px);
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    z-index: 1000;
+    animation: fadeIn 0.3s ease;
+}
+
+.card-modal {
+    width: 100%;
+    max-width: 450px;
+    padding: 2.5rem;
+    position: relative;
+    box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.5);
+    border: 1px solid rgba(255, 255, 255, 0.1);
+    animation: slideUp 0.4s cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+.modal-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 2rem;
+}
+
+.modal-header h3 {
+    margin: 0;
+    font-size: 1.5rem;
+    color: #3b2a1f;
+}
+
+.btn-close {
+    background: transparent;
+    border: none;
+    color: #7c2d12;
+    font-size: 2rem;
+    cursor: pointer;
+    line-height: 1;
+    padding: 0;
+    opacity: 0.6;
+    transition: opacity 0.2s;
+}
+
+.btn-close:hover {
+    opacity: 1;
+}
+
+/* Virtual Card Preview */
+.virtual-card-preview {
+    width: 100%;
+    height: 180px;
+    background: linear-gradient(135deg, #232526 0%, #414345 100%);
+    border-radius: 15px;
+    padding: 1.5rem;
+    margin-bottom: 2rem;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+    position: relative;
+    box-shadow: 0 10px 20px rgba(0, 0, 0, 0.3);
+    transition: all 0.5s ease;
+    color: #f8fafc;
+}
+
+.virtual-card-preview.visa {
+    background: linear-gradient(135deg, #1a2a6c 0%, #b21f1f 50%, #fdbb2d 100%);
+}
+
+.virtual-card-preview.mastercard {
+    background: linear-gradient(135deg, #373331 0%, #211d1c 100%);
+}
+
+.card-chip {
+    width: 40px;
+    height: 30px;
+    background: linear-gradient(135deg, #d4af37 0%, #f9f295 100%);
+    border-radius: 4px;
+}
+
+.card-number-display {
+    font-family: 'Courier New', Courier, monospace;
+    font-size: 1.4rem;
+    letter-spacing: 2px;
+    margin: 1rem 0;
+    color: #f8fafc;
+}
+
+.card-details-row {
+    display: flex;
+    justify-content: space-between;
+    text-transform: uppercase;
+    font-size: 0.8rem;
+    letter-spacing: 1px;
+    color: #e2e8f0;
+}
+
+/* Form Styling */
+.modern-form .form-group {
+    margin-bottom: 1.5rem;
+    position: relative;
+}
+
+.form-row {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 1.5rem;
+}
+
+.floating-label input {
+    width: 100%;
+    padding: 1rem;
+    background: #fff7ed;
+    border: 1px solid #fdba74;
+    border-radius: 8px;
+    color: #7c2d12;
+    font-size: 1rem;
+    transition: all 0.3s;
+}
+
+.floating-label select {
+    width: 100%;
+    padding: 1rem;
+    background: #fff7ed;
+    border: 1px solid #fdba74;
+    border-radius: 8px;
+    color: #7c2d12;
+    font-size: 1rem;
+    transition: all 0.3s;
+}
+
+.select-group label {
+    display: block;
+    margin-bottom: 0.5rem;
+    color: #7c2d12;
+    font-size: 0.9rem;
+}
+
+.floating-label label {
+    position: absolute;
+    left: 1rem;
+    top: 1rem;
+    color: #9a3412;
+    pointer-events: none;
+    transition: all 0.3s ease;
+}
+
+.floating-label input:focus,
+.floating-label input:not(:placeholder-shown),
+.floating-label select:focus {
+    border-color: #ea580c;
+    background: #ffffff;
+    color: #7c2d12;
+}
+
+.floating-label input:focus~label,
+.floating-label input:not(:placeholder-shown)~label,
+.floating-label select:focus~label {
+    top: -0.6rem;
+    left: 0.8rem;
+    font-size: 0.75rem;
+    color: #ea580c;
+    background: #fff7ed;
+    padding: 0 0.4rem;
+}
+
+.floating-label input::placeholder {
+    color: #c2410c;
+}
+
+.toggle-wrapper {
+    display: flex;
+    align-items: center;
+    gap: 0.75rem;
+    margin-bottom: 0.8rem;
+    padding: 0.7rem 0.9rem;
+    border: 1px solid #fed7aa;
+    border-radius: 10px;
+    background: #fff7ed;
+}
+
+.toggle-control {
+    position: relative;
+    display: inline-block;
+    width: 48px;
+    height: 26px;
+}
+
+.toggle-control input {
+    opacity: 0;
+    width: 0;
+    height: 0;
+}
+
+.toggle-slider {
+    position: absolute;
+    inset: 0;
+    background: #fed7aa;
+    border-radius: 999px;
+    transition: 0.25s;
+    cursor: pointer;
+}
+
+.toggle-slider::before {
+    content: '';
+    position: absolute;
+    height: 20px;
+    width: 20px;
+    left: 3px;
+    top: 3px;
+    background: #fff;
+    border-radius: 50%;
+    transition: 0.25s;
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.25);
+}
+
+.toggle-control input:checked+.toggle-slider {
+    background: linear-gradient(90deg, #4facfe 0%, #00f2fe 100%);
+}
+
+.toggle-control input:checked+.toggle-slider::before {
+    transform: translateX(22px);
+}
+
+.toggle-control input:focus-visible+.toggle-slider {
+    outline: 2px solid #9bd8ff;
+    outline-offset: 2px;
+}
+
+.toggle-label {
+    font-size: 0.9rem;
+    cursor: pointer;
+    color: #7c2d12;
+}
+
+.default-card-hint {
+    margin: 0 0 1.5rem;
+    font-size: 0.85rem;
+    color: #9bd8ff;
+}
+
+.field-error {
+    display: block;
+    margin-top: 0.45rem;
+    font-size: 0.78rem;
+    color: #ff8f8f;
+}
+
+.btn-primary-glow {
+    width: 100%;
+    padding: 1rem;
+    background: linear-gradient(to right, #ea580c 0%, #f97316 100%);
+    border: none;
+    border-radius: 10px;
+    color: #000;
+    font-weight: 700;
+    font-size: 1rem;
+    cursor: pointer;
+    transition: all 0.3s;
+    box-shadow: 0 4px 15px rgba(234, 88, 12, 0.4);
+}
+
+.btn-primary-glow:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 6px 20px rgba(234, 88, 12, 0.6);
+}
+
+.btn-primary-glow:disabled {
+    opacity: 0.5;
+    transform: none;
+    cursor: not-allowed;
+}
+
+/* Cards Grid Alignment */
+.cards-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(320px, 1fr));
+    gap: 2rem;
+}
+
+.payment-card {
+    min-height: 220px;
+    background: linear-gradient(140deg, #0f325f 0%, #0f5f7f 52%, #223862 100%);
+    border-radius: 20px;
+    padding: 1.5rem;
+    color: white;
+    position: relative;
+    box-shadow: 0 16px 34px rgba(6, 12, 23, 0.38);
+    transition: transform 0.25s ease, box-shadow 0.25s ease;
+    overflow: hidden;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+}
+
+.payment-card:hover {
+    transform: translateY(-6px);
+    box-shadow: 0 20px 44px rgba(5, 10, 18, 0.46);
+}
+
+.payment-card.default {
+    background: linear-gradient(145deg, #0a1b33 0%, #113657 55%, #1b5062 100%);
+    border: 1px solid rgba(120, 223, 255, 0.55);
+}
+
+.payment-card::before {
+    content: '';
+    position: absolute;
+    top: -120px;
+    right: -90px;
+    width: 240px;
+    height: 240px;
+    border-radius: 50%;
+    background: radial-gradient(circle, rgba(255, 255, 255, 0.24) 0%, rgba(255, 255, 255, 0) 70%);
+    pointer-events: none;
+}
+
+.default-ribbon {
+    align-self: flex-start;
+    background: linear-gradient(90deg, #ffde7a 0%, #ffd24c 100%);
+    color: #2f2300;
+    font-weight: 800;
+    font-size: 0.72rem;
+    letter-spacing: 0.6px;
+    text-transform: uppercase;
+    padding: 0.35rem 0.65rem;
+    border-radius: 999px;
+    margin-bottom: 0.5rem;
+    box-shadow: 0 6px 16px rgba(255, 210, 76, 0.35);
+    display: inline-flex;
+    align-items: center;
+    gap: 0.35rem;
+}
+
+.default-symbol {
+    line-height: 1;
+    font-size: 0.82rem;
+}
+
+.payment-card .card-vendor {
+    position: absolute;
+    top: 1.3rem;
+    right: 1.5rem;
+    font-weight: 800;
+    font-size: 1.1rem;
+    opacity: 0.95;
+}
+
+.payment-card .card-method-type {
+    margin-top: 0.35rem;
+    font-size: 0.78rem;
+    letter-spacing: 0.6px;
+    text-transform: uppercase;
+    color: rgba(255, 255, 255, 0.82);
+}
+
+.payment-card .card-number {
+    margin-top: 0.8rem;
+    font-size: 1.3rem;
+    letter-spacing: 1.5px;
+    font-family: 'Courier New', Courier, monospace;
+}
+
+.payment-card .card-holder {
+    margin-top: 0.8rem;
+    font-size: 0.86rem;
+    letter-spacing: 0.6px;
+    text-transform: uppercase;
+    color: rgba(255, 255, 255, 0.85);
+}
+
+.payment-card .card-footer {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    margin-top: 1rem;
+}
+
+.payment-card .card-info {
+    display: flex;
+    flex-direction: column;
+    gap: 0.15rem;
+}
+
+.payment-card .card-info .label {
+    text-transform: uppercase;
+    font-size: 0.7rem;
+    opacity: 0.75;
+    letter-spacing: 0.7px;
+}
+
+.payment-card .card-info .value {
+    font-size: 0.95rem;
+    font-weight: 700;
+}
+
+.payment-card .card-actions {
+    display: flex;
+    align-items: center;
+    gap: 0.45rem;
+    flex-wrap: wrap;
+    justify-content: flex-end;
+}
+
+.status-pill {
+    padding: 0.3rem 0.6rem;
+    border-radius: 999px;
+    font-size: 0.72rem;
+    font-weight: 700;
+    letter-spacing: 0.4px;
+}
+
+.status-pill.default-status {
+    color: #2f2300;
+    background: linear-gradient(90deg, #ffde7a 0%, #ffd24c 100%);
+    display: inline-flex;
+    align-items: center;
+    gap: 0.35rem;
+}
+
+.btn-set-default {
+    background: rgba(234, 88, 12, 0.2);
+    border: 1px solid rgba(234, 88, 12, 0.6);
+    color: #ffedd5;
+    padding: 6px 12px;
+    border-radius: 8px;
+    font-size: 0.8rem;
+    cursor: pointer;
+    transition: all 0.2s;
+}
+
+.btn-set-default:hover {
+    background: rgba(234, 88, 12, 0.4);
+    border-color: rgba(234, 88, 12, 0.95);
+    color: #fff;
+}
+
+.btn-set-default:disabled {
+    opacity: 0.55;
+    cursor: default;
+}
+
+.btn-delete {
+    background: rgba(255, 255, 255, 0.12);
+    border: 1px solid rgba(255, 255, 255, 0.18);
+    color: #fff;
+    padding: 6px 12px;
+    border-radius: 8px;
+    font-size: 0.8rem;
+    cursor: pointer;
+    transition: all 0.2s;
+}
+
+.btn-delete:hover {
+    background: #ff4d4d;
+    border-color: #ff4d4d;
+    color: #fff;
+}
+
+@keyframes fadeIn {
+    from {
+        opacity: 0;
+    }
+
+    to {
+        opacity: 1;
+    }
+}
+
+@keyframes slideUp {
+    from {
+        transform: translateY(30px);
+        opacity: 0;
+    }
+
+    to {
+        transform: translateY(0);
+        opacity: 1;
+    }
+}
+
+.glass-morphism {
+    background: rgba(30, 30, 30, 0.8);
+    backdrop-filter: blur(20px);
+}
+
+.empty-state {
+    margin-top: 1.5rem;
+    color: #7c2d12;
+}

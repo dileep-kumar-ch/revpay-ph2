@@ -1,0 +1,54 @@
+﻿<app-feature-nav></app-feature-nav>
+<div class="security-container">
+    <div class="security-card">
+        <div class="header-block">
+            <h2>Security Settings</h2>
+            <p class="subtitle">Manage your account security and transaction settings.</p>
+        </div>
+
+        <section class="security-section">
+            <h3>Transaction PIN</h3>
+            <p class="section-subtitle">Set a numeric PIN (exactly 4 digits) to secure your money transfers.</p>
+
+            <form [formGroup]="pinForm" (ngSubmit)="onPinSubmit()">
+                <div class="form-row">
+                    <div class="form-group">
+                        <label for="pin">New PIN</label>
+                        <input
+                            type="password"
+                            id="pin"
+                            formControlName="pin"
+                            class="form-control"
+                            placeholder="••••"
+                            maxlength="4" />
+                    </div>
+                    <div class="form-group">
+                        <label for="confirmPin">Confirm PIN</label>
+                        <input
+                            type="password"
+                            id="confirmPin"
+                            formControlName="confirmPin"
+                            class="form-control"
+                            placeholder="••••"
+                            maxlength="4" />
+                    </div>
+                </div>
+
+                <div class="error-message" *ngIf="errorMessage">{{ errorMessage }}</div>
+                <div class="error-message" *ngIf="pinForm.errors?.['mismatch'] && pinForm.get('confirmPin')?.touched">
+                    PINs do not match.
+                </div>
+                <div class="success-message" *ngIf="successMessage">{{ successMessage }}</div>
+
+                <button type="submit" class="btn-primary" [disabled]="pinForm.invalid || loading">
+                    {{ loading ? 'Updating...' : 'Set PIN' }}
+                </button>
+            </form>
+
+            <div class="support-link-wrap">
+                <a routerLink="/forgot-pin" class="support-link">Forgot your transaction PIN?</a>
+            </div>
+        </section>
+    </div>
+</div>
+

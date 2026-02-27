@@ -1,0 +1,94 @@
+<app-feature-nav></app-feature-nav>
+
+<div class="notifications-page">
+  <div class="notifications-header">
+    <h2>Notifications</h2>
+    <div class="header-actions">
+      <button class="btn btn-secondary" (click)="toggleUnreadOnly()">
+        {{ unreadOnly ? 'Show All' : 'Show Unread Only' }}
+      </button>
+      <button class="btn btn-primary" (click)="markAllAsRead()">Mark All as Read</button>
+    </div>
+  </div>
+
+  <div class="category-tabs">
+    <button class="tab-btn" [class.active]="selectedCategory === 'ALL'" (click)="setCategory('ALL')">All</button>
+    <button class="tab-btn" [class.active]="selectedCategory === 'TRANSACTIONS'" (click)="setCategory('TRANSACTIONS')">Transactions</button>
+    <!-- <button class="tab-btn" [class.active]="selectedCategory === 'REQUESTS'" (click)="setCategory('REQUESTS')">Requests</button> -->
+    <button class="tab-btn" [class.active]="selectedCategory === 'ALERTS'" (click)="setCategory('ALERTS')">Alerts</button>
+  </div>
+
+  <div class="content-grid">
+    <section class="notifications-list">
+      <div *ngIf="loading" class="state">Loading notifications...</div>
+      <div *ngIf="!loading && notifications.length === 0" class="state">No notifications found.</div>
+      <div *ngIf="error" class="state error">{{ error }}</div>
+
+      <article
+        *ngFor="let n of notifications"
+        class="notification-card"
+        [class.unread]="!n.read"
+        (click)="onOpenNotification(n)">
+        <header class="card-head">
+          <span class="category">{{ n.category }}</span>
+          <span class="status" *ngIf="n.status">{{ n.status }}</span>
+        </header>
+        <h3>{{ n.title }}</h3>
+        <p>{{ n.message }}</p>
+        <div class="meta">
+          <span *ngIf="n.amount !== undefined">Amount: {{ n.amount | currency:'USD':'symbol':'1.2-2' }}</span>
+          <span *ngIf="n.counterparty">Counterparty: {{ n.counterparty }}</span>
+          <span>Time: {{ (n.eventTime || n.createdAt) | date:'medium' }}</span>
+        </div>
+        <div class="card-actions">
+          <button class="btn btn-link" (click)="markOneAsRead(n); $event.stopPropagation()" [disabled]="n.read">
+            {{ n.read ? 'Read' : 'Mark Read' }}
+          </button>
+          <button
+            *ngIf="canRespondToNotification(n)"
+            class="btn btn-success btn-inline"
+            (click)="onAcceptRequest(n); $event.stopPropagation()"
+            [disabled]="processingRequestId !== null">
+            Accept
+          </button>
+          <button
+            *ngIf="canRespondToNotification(n)"
+            class="btn btn-danger btn-inline"
+            (click)="onRejectRequest(n); $event.stopPropagation()"
+            [disabled]="processingRequestId !== null">
+            Reject
+          </button>
+        </div>
+      </article>
+    </section>
+
+    <!-- <aside class="preferences-panel">
+      <h3>Notification Preferences</h3>
+      <label class="pref-row">
+        <input type="checkbox" [(ngModel)]="preferences.transactionsEnabled">
+        <span>Transactions</span>
+      </label>
+      <label class="pref-row">
+        <input type="checkbox" [(ngModel)]="preferences.requestsEnabled">
+        <span>Requests</span>
+      </label>
+      <label class="pref-row">
+        <input type="checkbox" [(ngModel)]="preferences.alertsEnabled">
+        <span>Alerts</span>
+      </label>
+      <label class="pref-row threshold">
+        <span>Low Balance Threshold</span>
+        <input type="number" min="0" step="0.01" [(ngModel)]="preferences.lowBalanceThreshold">
+      </label>
+      <button class="btn btn-primary save-btn" (click)="savePreferences()" [disabled]="savingPreferences">
+        {{ savingPreferences ? 'Saving...' : 'Save Preferences' }}
+      </button>
+    </aside>
+  </div>
+</div> -->
+
+<app-pin-verification
+  *ngIf="showPinModal"
+  (verified)="onPinVerified()"
+  (cancel)="onPinCancel()">
+</app-pin-verification>

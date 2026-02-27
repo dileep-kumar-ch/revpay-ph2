@@ -1,0 +1,120 @@
+<div class="register-container">
+    <div class="branding-section">
+        <div class="logo-large">
+            <span class="logo-rp">RP</span>
+            <span class="logo-name">RevPay</span>
+        </div>
+        <p class="tagline">a digital payment application</p>
+    </div>
+    <div class="register-card">
+        <h2>Create Account</h2>
+        <p class="subtitle">Join RevPay today</p>
+
+        <form [formGroup]="registerForm" (ngSubmit)="onSubmit()">
+            <div class="form-row">
+                <div class="form-group">
+                    <label for="fullName">Full Name</label>
+                    <input type="text" id="fullName" formControlName="fullName" class="form-control"
+                        placeholder="John Doe" />
+                </div>
+
+                <div class="form-group">
+                    <label for="username">Username</label>
+                    <input type="text" id="username" formControlName="username" class="form-control"
+                        placeholder="johndoe" />
+                </div>
+            </div>
+
+            <div class="form-group">
+                <label for="email">Email</label>
+                <input type="email" id="email" formControlName="email" class="form-control"
+                    placeholder="john@example.com" />
+            </div>
+
+            <div class="form-row">
+                <div class="form-group">
+                    <label for="password">Password</label>
+                    <input type="password" id="password" formControlName="password" class="form-control"
+                        placeholder="Min 6 characters" />
+                </div>
+
+                <div class="form-group">
+                    <label for="phoneNumber">Phone Number</label>
+                    <input type="tel" id="phoneNumber" formControlName="phoneNumber" class="form-control"
+                        placeholder="+1234567890" />
+                </div>
+            </div>
+
+            <div class="form-group">
+                <label for="role">Account Type</label>
+                <select id="role" formControlName="role" class="form-control">
+                    <option value="PERSONAL">Personal Account</option>
+                    <option value="BUSINESS">Business Account</option>
+                </select>
+            </div>
+
+            <div formArrayName="securityQuestions" class="security-questions-section">
+                <h3>Security Questions</h3>
+                <p class="subtitle">Used for account recovery</p>
+                <div *ngFor="let q of securityQuestions.controls; let i=index" [formGroupName]="i" class="form-group">
+                    <label>{{ defaultQuestions[i] }}</label>
+                    <input type="text" formControlName="answer" class="form-control" placeholder="Your answer" />
+                </div>
+            </div>
+
+            <div *ngIf="isBusinessAccount()" class="business-section">
+                <h3>Business Information</h3>
+
+                <div class="form-row">
+                    <div class="form-group">
+                        <label for="businessName">Business Name</label>
+                        <input type="text" id="businessName" formControlName="businessName" class="form-control"
+                            placeholder="Your Business Name" />
+                    </div>
+                    <div class="form-group">
+                        <label for="businessType">Business Type</label>
+                        <select id="businessType" formControlName="businessType" class="form-control">
+                            <option value="">Select Type</option>
+                            <option value="SOLE_PROPRIETORSHIP">Sole Proprietorship</option>
+                            <option value="PARTNERSHIP">Partnership</option>
+                            <option value="CORPORATION">Corporation</option>
+                            <option value="LLC">LLC</option>
+                        </select>
+                    </div>
+                </div>
+
+                <div class="form-row">
+                    <div class="form-group">
+                        <label for="taxId">Tax ID / VAT</label>
+                        <input type="text" id="taxId" formControlName="taxId" class="form-control"
+                            placeholder="Tax ID" />
+                    </div>
+
+                    <div class="form-group">
+                        <label for="businessAddress">Business Address</label>
+                        <input type="text" id="businessAddress" formControlName="businessAddress" class="form-control"
+                            placeholder="Full Address" />
+                    </div>
+                </div>
+
+                <div class="form-group">
+                    <label for="verificationDocsPath">Verification Document Path</label>
+                    <input type="text" id="verificationDocsPath" formControlName="verificationDocsPath"
+                        class="form-control" placeholder="uploads/business/verification.pdf" />
+                </div>
+            </div>
+
+            <div class="error-message" *ngIf="errorMessage">
+                {{ errorMessage }}
+            </div>
+
+            <button type="submit" class="btn-primary" [disabled]="registerForm.invalid || loading">
+                {{ loading ? 'Creating Account...' : 'Create Account' }}
+            </button>
+        </form>
+
+        <div class="login-link">
+            Already have an account? <a routerLink="/login">Sign in here</a>
+        </div>
+    </div>
+</div>

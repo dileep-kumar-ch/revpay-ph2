@@ -1,0 +1,189 @@
+<app-feature-nav></app-feature-nav>
+
+<div class="requests-page">
+    <div class="d-flex justify-content-between align-items-center mb-4">
+        <h2 class="page-title mb-0">Money Requests</h2>
+    </div>
+    <div class="row">
+        <!-- Request Money Form -->
+        <div class="col-md-4">
+            <div class="card panel-card mb-4">
+                <div class="card-header panel-header border-0 pb-0">
+                    <h5 class="mb-0">Request Money</h5>
+                </div>
+                <div class="card-body">
+                    <form [formGroup]="requestForm" (ngSubmit)="onSubmit()">
+                        <div class="mb-3">
+                            <label class="form-label small">Recipient Username/Email</label>
+                            <div class="input-group">
+                                <span class="input-group-text bg-transparent border-end-0"><i
+                                        class="bi bi-person"></i></span>
+                                <input type="text" class="form-control bg-transparent border-start-0"
+                                    formControlName="payerUsername" placeholder="Enter username or email">
+                            </div>
+                        </div>
+                        <div class="mb-3">
+                            <label class="form-label small">Amount</label>
+                            <div class="input-group">
+                                <span class="input-group-text bg-transparent border-end-0">$</span>
+                                <input type="number" class="form-control bg-transparent border-start-0"
+                                    formControlName="amount" placeholder="0.00">
+                            </div>
+                        </div>
+                        <div class="mb-3">
+                            <label class="form-label small">Note</label>
+                            <textarea class="form-control bg-transparent" formControlName="note" rows="2"
+                                placeholder="What is this for?"></textarea>
+                        </div>
+
+                        <div *ngIf="message"
+                            class="alert alert-success py-2 small border-0 bg-success bg-opacity-10 text-success">{{
+                            message }}</div>
+                        <div *ngIf="error"
+                            class="alert alert-danger py-2 small border-0 bg-danger bg-opacity-10 text-danger">{{ error
+                            }}</div>
+
+                        <button type="submit" class="btn btn-primary w-100 mt-2"
+                            [disabled]="requestForm.invalid || submitting">
+                            {{ submitting ? 'Sending...' : 'Send Request' }}
+                        </button>
+                    </form>
+                </div>
+            </div>
+        </div>
+
+        <!-- Requests List -->
+        <div class="col-md-8">
+            <div class="card panel-card">
+                <div class="card-header panel-header border-0 d-flex justify-content-between align-items-center">
+                    <h5 class="mb-0">Manage Requests</h5>
+                    <button class="btn btn-sm btn-outline-secondary border-0" (click)="loadRequests()">
+                        <i class="bi bi-arrow-clockwise"></i> Refresh
+                    </button>
+                </div>
+                <div class="card-body p-0">
+                    <ul class="nav nav-tabs nav-fill border-0 request-tabs" id="requestTabs" role="tablist">
+                        <li class="nav-item">
+                            <button class="nav-link active border-0 py-3" data-bs-toggle="tab"
+                                data-bs-target="#incoming">
+                                Incoming ({{ incomingRequests.length }})
+                            </button>
+                        </li>
+                        <li class="nav-item">
+                            <button class="nav-link border-0 py-3" data-bs-toggle="tab"
+                                data-bs-target="#outgoing">
+                                Outgoing ({{ outgoingRequests.length }})
+                            </button>
+                        </li>
+                    </ul>
+
+                    <div class="tab-content p-3">
+                        <!-- Incoming Requests -->
+                        <div class="tab-pane fade show active" id="incoming">
+                            <div *ngIf="loading" class="text-center py-5">
+                                <div class="spinner-border text-info" role="status"></div>
+                            </div>
+
+                            <div *ngIf="!loading && incomingRequests.length === 0"
+                                class="text-center py-5 empty-text">
+                                <i class="bi bi-inbox h1 d-block mb-3 opacity-25"></i>
+                                No incoming money requests.
+                            </div>
+
+                            <div *ngFor="let req of incomingRequests"
+                                class="card mb-3 request-item-card border-0 hover-up overflow-hidden">
+                                <div class="card-body d-flex justify-content-between align-items-center py-3 px-4">
+                                    <div class="d-flex align-items-center">
+                                        <div class="avatar me-3 bg-primary bg-opacity-25 rounded-circle d-flex align-items-center justify-content-center"
+                                            style="width: 45px; height: 45px;">
+                                            <i class="bi bi-person text-primary"></i>
+                                        </div>
+                                        <div>
+                                            <h6 class="mb-0 fw-bold">From: {{ getDisplayName(req.requester) }}</h6>
+                                            <p class="mb-1 small"
+                                                *ngIf="getSecondaryIdentity(req.requester)">
+                                                {{ getSecondaryIdentity(req.requester) }}
+                                            </p>
+                                            <p class="mb-0 small">{{ req.note }}</p>
+                                            <small class="opacity-75" style="font-size: 0.75rem;">{{
+                                                req.createdAt | date:'medium' }}</small>
+                                        </div>
+                                    </div>
+                                    <div class="text-end">
+                                        <div class="h5 mb-2 amount-highlight fw-bold">${{ req.amount | number:'1.2-2' }}</div>
+                                        <div *ngIf="req.status === 'PENDING'" class="btn-group btn-group-sm">
+                                            <button class="btn btn-success px-3"
+                                                (click)="respond(req.id, true)">Accept</button>
+                                            <button class="btn btn-outline-danger"
+                                                (click)="respond(req.id, false)">Decline</button>
+                                        </div>
+                                        <small *ngIf="req.status === 'PENDING'" class="d-block mt-1">
+                                            Accept asks PIN and sends money instantly.
+                                        </small>
+                                        <span *ngIf="req.status !== 'PENDING'" class="request-status"
+                                            [ngClass]="{
+                                                'status-accepted': req.status === 'ACCEPTED',
+                                                'status-declined': req.status === 'DECLINED'
+                                            }">
+                                            {{ getStatusLabel(req.status) }}
+                                        </span>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- Outgoing Requests -->
+                        <div class="tab-pane fade" id="outgoing">
+                            <div *ngIf="loading" class="text-center py-5">
+                                <div class="spinner-border text-info" role="status"></div>
+                            </div>
+
+                            <div *ngIf="!loading && outgoingRequests.length === 0"
+                                class="text-center py-5 empty-text">
+                                <i class="bi bi-send h1 d-block mb-3 opacity-25"></i>
+                                You haven't requested money from anyone.
+                            </div>
+
+                            <div *ngFor="let req of outgoingRequests"
+                                class="card mb-3 request-item-card border-0">
+                                <div class="card-body d-flex justify-content-between align-items-center py-3 px-4">
+                                    <div class="d-flex align-items-center">
+                                        <div class="avatar me-3 bg-info bg-opacity-10 rounded-circle d-flex align-items-center justify-content-center"
+                                            style="width: 45px; height: 45px;">
+                                            <i class="bi bi-send text-info"></i>
+                                        </div>
+                                        <div>
+                                            <h6 class="mb-0">To: {{ getDisplayName(req.payer) }}</h6>
+                                            <p class="mb-1 small" *ngIf="getSecondaryIdentity(req.payer)">
+                                                {{ getSecondaryIdentity(req.payer) }}
+                                            </p>
+                                            <p class="mb-0 small">{{ req.note }}</p>
+                                            <small class="opacity-75">{{ req.createdAt | date:'medium'
+                                                }}</small>
+                                        </div>
+                                    </div>
+                                    <div class="text-end">
+                                        <div class="h5 mb-2 fw-bold amount-highlight">${{ req.amount | number:'1.2-2' }}</div>
+                                        <span class="request-status"
+                                            [ngClass]="{
+                                                'status-pending': req.status === 'PENDING',
+                                                'status-accepted': req.status === 'ACCEPTED',
+                                                'status-declined': req.status === 'DECLINED',
+                                                'status-cancelled': req.status === 'CANCELLED'
+                                            }">
+                                            {{ getStatusLabel(req.status) }}
+                                        </span>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- PIN Verification Modal -->
+    <app-pin-verification *ngIf="showPinModal" (verified)="onPinVerified()" (cancel)="onPinCancel()">
+    </app-pin-verification>
+</div>
